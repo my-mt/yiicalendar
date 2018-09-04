@@ -14,9 +14,11 @@ class CalendarController extends Controller
     public function actionIndex()
     {
         $client = User::getClient();
-        echo '<pre>';
-        print_r($client);
-        echo '</pre>';
+        
+        echo $client->getRefreshToken();
+//        echo '<pre>';
+//        print_r($client);
+//        echo '</pre>';
         
         $service = new Google_Service_Calendar($client);
         
@@ -73,10 +75,13 @@ class CalendarController extends Controller
         
         $client->authenticate($_GET['code']);
 
-//        $_SESSION['access_token'] = $client->getAccessToken();
-        echo '==<pre>';
-        print_r($client);
-        echo '</pre>';
+        $_SESSION['access_token'] = $client->getAccessToken();
+        echo $client->getRefreshToken();
+        echo '<br>';
+        echo 'redirect ???';
+//        echo '==<pre>';
+//        print_r($client);
+//        echo '</pre>';
         exit;
     }
 

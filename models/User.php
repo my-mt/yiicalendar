@@ -114,23 +114,25 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 
         $client = new Google_Client();
         $client->setApplicationName('Google Calendar API PHP my test');
-        $client->setScopes(Google_Service_Calendar::CALENDAR_READONLY);
+        $client->setScopes(Google_Service_Calendar::CALENDAR);
         $client->setAuthConfig($clientSecrets);
         $client->setAccessType('offline');
-                                    $auth_url = $client->createAuthUrl();
-            header('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL));
-            exit;
         
-//        session_start();
+//        if (!$client->getRefreshToken())
+//            $_SESSION['access_token'] = null;
+
 
         if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
             $client->setAccessToken($_SESSION['access_token']);
             // Refresh the token if it's expired.
             if ($client->isAccessTokenExpired()) {
-                            $auth_url = $client->createAuthUrl();
-            header('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL));
-//                $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
-//                $_SESSION['access_token'] = $client->getAccessToken();
+                if (!$client->getRefreshToken()) { // RefreshToken создается один раз, его потом нет???
+                    $_SESSION['access_token'] = NULL;
+                    $auth_url = $client->createAuthUrl();
+                    header('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL));
+                }
+                $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+                $_SESSION['access_token'] = $client->getAccessToken();
             }
             return $client;
         } else {
