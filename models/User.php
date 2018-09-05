@@ -130,6 +130,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
                     $_SESSION['access_token'] = NULL;
                     $auth_url = $client->createAuthUrl();
                     header('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL));
+                    exit;
                 }
                 $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
                 $_SESSION['access_token'] = $client->getAccessToken();
@@ -138,6 +139,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
         } else {
             $auth_url = $client->createAuthUrl();
             header('Location: ' . filter_var($auth_url, FILTER_SANITIZE_URL));
+            exit;
         }
     }
 

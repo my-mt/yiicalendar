@@ -13,9 +13,9 @@ class CalendarController extends Controller
     
     public function actionIndex()
     {
+        
         $client = User::getClient();
         
-        echo $client->getRefreshToken();
 //        echo '<pre>';
 //        print_r($client);
 //        echo '</pre>';
