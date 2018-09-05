@@ -7,6 +7,7 @@ use yii\web\Controller;
 use Google_Client;
 use Google_Service_Calendar;
 use app\models\User;
+use app\models\Calendar;
 
 class CalendarController extends Controller
 {
@@ -15,46 +16,22 @@ class CalendarController extends Controller
     {
         
         $client = User::getClient();
-        
-//        echo '<pre>';
-//        print_r($client);
-//        echo '</pre>';
-        
         $service = new Google_Service_Calendar($client);
+        $calendarList = Calendar::getCalendarList($service);
         
-        // Print the next 10 events on the user's calendar.
-        $calendarId = 'primary';
-// $calendarId = 'tjgn23029jreccmvite9g70hmo@group.calendar.google.com';
-        $optParams = array(
-            'maxResults' => 100,
-            'orderBy' => 'startTime',
-            'singleEvents' => true,
-            'timeMin' => '2018-02-12T15:19:21+00:00',
-            'timeMax' => '2018-12-12T15:19:21+00:00',
-                // 'timeMin' => date('c'),
-        );
-// https://developers.google.com/calendar/v3/reference/events/list
-        $results = $service->events->listEvents($calendarId, $optParams);
-        $events = $results->getItems();
+        $timeMin = '2018-09-01T00:00:00+00:00';
+        $timeMax = '2018-10-01T00:00:00+00:00';
         
-//        echo '==<pre>';
-//        print_r($events);
+        $listEvents = Calendar::getListEvents($service, 'primary', $timeMin, $timeMax, 100);
+//        
+//        echo '<pre>';
+//        print_r($calendarList);
 //        echo '</pre>';
-
-        if (empty($events)) {
-            print "No upcoming events found.\n";
-        } else {
-            print "Upcoming events:\n";
-            foreach ($events as $event) {
-                $start = $event->start->dateTime;
-                if (empty($start)) {
-                    $start = $event->start->date;
-                }
-                printf("%s (%s)\n%s\n", $event->getSummary(), $start, $event->getDescription());
-                echo '<br>';
-            }
-        }
-        exit;
+        
+        return $this->render('index', [
+            'calendarList' => $calendarList,
+            'listEvents' => $listEvents
+        ]);
     }
 
     public function actionLogin()
