@@ -1,0 +1,629 @@
+/* pnpNT CSS file */
+@media (max-width: 767px) {
+    .dropdown-header {
+        color: #fff;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: #fff;
+    }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
+        color: rgba(195, 212, 227, 1);
+    }
+}
+
+
+
+#main-menu.navbar-default .navbar-brand {
+    color: rgba(255, 255, 255, 1);
+}
+#main-menu.navbar-default {
+    font-size: 14px;
+    background-color: rgba(51, 122, 183, 1);
+    border-width: 0px;
+    border-radius: 0px;
+}
+#main-menu.navbar-default .navbar-nav>li>a {
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(51, 122, 183, 1);
+}
+#main-menu.navbar-default .navbar-nav>li>a:hover,
+#main-menu.navbar-default .navbar-nav>li>a:focus {
+    color: rgba(195, 212, 227, 1);
+    background-color: rgba(51, 122, 183, 1);
+}
+#main-menu.navbar-default .navbar-nav>.active>a,
+#main-menu.navbar-default .navbar-nav>.active>a:hover,
+#main-menu.navbar-default .navbar-nav>.active>a:focus {
+    color: rgba(255, 255, 255, 1);
+    background-color: rgba(63, 114, 158, 1);
+}
+#main-menu.navbar-default .navbar-toggle {
+    border-color: #fff;
+}
+#main-menu.navbar-default .navbar-toggle:hover,
+#main-menu.navbar-default .navbar-toggle:focus {
+    background-color: #3f729e;
+}
+#main-menu.navbar-default .navbar-toggle .icon-bar {
+    background-color: #fff;
+}
+#main-menu.navbar-default .navbar-toggle:hover .icon-bar,
+#main-menu.navbar-default .navbar-toggle:focus .icon-bar {
+    background-color: #fff;
+}
+
+
+/*добавлено */
+.weathe b{
+font-size: 150%;
+}
+.weathe {
+text-align: center;
+}
+
+.table-calendar td{
+	border: 1px solid #777;
+	padding: 10px;
+}
+
+/* календарь */
+
+table.calendar    {
+ border-left:1px solid #999;
+width: 100%;
+  }
+
+/* высота ячеек */
+tr.calendar-row  { 
+ height:60px;
+}
+td.calendar-day  { 
+	min-height:80px;
+	 font-size:11px;
+	  position:relative; 
+border-bottom:1px solid #777;
+	  } 
+
+/* выделяем текущую дату */
+td.calendar-day-in  { 
+	min-height:80px;
+	 font-size:11px;
+	  position:relative; 
+	outline:2px solid red;
+	outline-offset: -2px;
+	  } 
+	  * html div.calendar-day {
+	   height:80px;
+
+	    }
+
+ .calendar-day-tab{
+display: table;
+height:60px;
+width:100%;
+	    }
+
+
+	    .calendar-day-row{
+display: table-row;
+	    }
+
+/*td.calendar-day:hover  { 
+	background:#eceff5; 
+}*/
+
+/* подсвечивает дни соседних месяцев */
+td.calendar-day-np  { 
+	background:#eee; 
+	min-height:80px; 
+	border-bottom:1px solid #777;
+	} * html div.calendar-day-np { height:80px; }
+
+
+/*шапка календаря */
+td.calendar-day-head {
+ background:#ABCDEF;
+  font-weight:bold;
+   text-align:center;
+    width:120px;
+ padding:5px; 
+ border-bottom:1px solid #999;
+  border-top:1px solid #999; 
+  border-right:1px solid #999; 
+}
+ 
+ 
+ /*дни месяца в календаре */
+div.day-number    {
+	background:#fff;
+	color:#000;
+	font-weight:bold;
+ padding:2px;
+
+ width:100%;
+ height: 20%;
+ text-align:left;
+/*border: 1px solid black;*/
+display: table-cell;
+}
+
+
+
+ /*дни месяца в календаре закрашенные в день события */
+.day-number-indicator{
+	background: #FFB02E;
+	color:#000;
+	font-weight:bold;
+ padding:2px;
+margin-top:0;
+ width:100%;
+ height: 20%;
+ text-align:left;
+
+display: table-cell;
+
+
+
+}
+
+/*блок событий в календаре*/
+.calev{
+	background:#FFB02E;
+	width: 100%;
+	height: 80%;
+	text-align:center;
+font: bold italic 130% serif;
+	display: table-cell;
+	padding:0px;
+	/*border-bottom:1px solid #000;*/
+}
+ 
+ 
+td.calendar-day, td.calendar-day-np { 
+	width:120px; 
+	padding:0; 
+	border-right:1px solid #999; }
+	
+/*конец календаря*/
+
+/*страница события*/
+.link_new {
+	text-align: right;
+}
+
+table.event {
+
+	border-collapse: collapse;
+	font-size: 120%;
+	margin: 0 auto;
+	/*min-width: 380px;*/
+	max-width: 700px;
+	width: 100%;
+	
+}
+
+table.event td {
+	max-width: 150px;
+	word-wrap: break-word;
+border-bottom: 1px solid #000; /* Линия снизу */
+	text-align: center;
+}
+
+table.event .header {
+	font-weight: bold;
+	font-size: 90%;
+}
+
+/* weathe */
+
+table.weathe-date td{
+/*border: 1px solid #000;*/
+
+vertical-align: top;
+
+}
+
+
+
+
+
+/* кнопки и форма в погоде начало */
+
+.weather-div-form{
+ display: inline-block;
+ vertical-align: top;
+ padding: 5px 2px 5px 0px;
+
+}
+
+/* кнопки и форма в погоде конец */
+
+/* вывод текущей погоды начало */
+
+.weather-div{
+ text-align: center;
+}
+
+.archive .nav > li > a {
+  padding: 10px;
+}
+
+.nav-pills > li.active > a, .nav-pills > li.active > a:hover {
+  border: 2px solid #337ab7;
+  color: #337ab7;
+  background-color: #fff;
+  font-weight: 600;
+}
+
+.out-sens-text b{
+	font-weight: bold;
+	font-size: 225%;
+}
+
+.gsInformer {
+  width: 100% !important;
+}
+#gs-moduleCurrentBlock{
+  display: none !important;
+}
+/* вывод текущей погоды конец */
+
+
+/*кнопки */
+a.button-month {
+  display: inline-block;
+  font-family: arial,sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  color: rgb(68,68,68);
+  text-decoration: none;
+  user-select: none;
+  padding: .2em .2em;
+  outline: none;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 2px;
+  background: rgb(245,245,245) linear-gradient(#f4f4f4, #f1f1f1);
+  transition: all .218s ease 0s;
+  
+  
+  width: 75px;
+  text-align: center;
+}
+a.button-month:hover {
+  color: rgb(24,24,24);
+  border: 1px solid rgb(198,198,198);
+  background: #f7f7f7 linear-gradient(#f7f7f7, #f1f1f1);
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+a.button-month:active {
+  color: rgb(51,51,51);
+  border: 1px solid rgb(204,204,204);
+  background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
+  box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;
+}
+
+a.button-day {
+  display: inline-block;
+  font-family: arial,sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  color: rgb(68,68,68);
+  text-decoration: none;
+  user-select: none;
+  padding: .2em .2em;
+  outline: none;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 2px;
+  background: rgb(245,245,245) linear-gradient(#f4f4f4, #f1f1f1);
+  transition: all .218s ease 0s;
+  
+  
+  width: 45px;
+  text-align: center;
+}
+a.button-day:hover {
+  color: rgb(24,24,24);
+  border: 1px solid rgb(198,198,198);
+  background: #f7f7f7 linear-gradient(#f7f7f7, #f1f1f1);
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+a.button-day:active {
+  color: rgb(51,51,51);
+  border: 1px solid rgb(204,204,204);
+  background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
+  box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;
+}
+
+
+/* транспоранты */
+p.сurdate {
+  display: inline-block;
+  font-family: arial,sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  color: rgb(68,68,68);
+  text-decoration: none;
+  user-select: none;
+  padding: .2em .2em;
+  outline: none;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 2px;
+  background: rgb(245,245,245) linear-gradient(#f4f4f4, #f1f1f1);
+  transition: all .218s ease 0s;
+  
+  
+  width: 115px;
+  text-align: center;
+  }
+  
+  
+  .button-date {
+vertical-align: top;
+margin-top: 0;
+}
+.button-date {
+  display: inline-block;
+  font-family: arial,sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  color: rgb(68,68,68);
+  text-decoration: none;
+  user-select: none;
+  padding: .2em .2em;
+  outline: none;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 2px;
+  background: rgb(245,245,245) linear-gradient(#f4f4f4, #f1f1f1);
+  transition: all .218s ease 0s;
+  
+  
+  
+  height: 27px;
+  text-align: center;
+}
+.button-date :hover {
+  color: rgb(24,24,24);
+  border: 1px solid rgb(198,198,198);
+  background: #f7f7f7 linear-gradient(#f7f7f7, #f1f1f1);
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+.button-date :active {
+  color: rgb(51,51,51);
+  border: 1px solid rgb(204,204,204);
+  background: rgb(238,238,238) linear-gradient(rgb(238,238,238), rgb(224,224,224));
+  box-shadow: 0 1px 2px rgba(0,0,0,.1) inset;
+}
+  
+
+/* счетчик */
+.counter {
+    margin-right: 3px;
+    margin-bottom: 3px;
+    text-align: right;
+   
+}
+
+/*таблица журнала начало*/
+
+table.info {
+	
+	border-collapse: collapse;
+	font-size: 120%;
+	margin: 0 auto;
+	/*min-width: 380px;*/
+	max-width: 700px;
+	width: 100%;
+}
+
+table.info td {
+max-width: 110px;
+word-wrap: break-word;
+	text-align: center;
+	border-bottom: 1px solid #999; Линия снизу */
+}
+
+
+table.info td.bline {
+
+
+}
+
+
+
+
+table.info th {
+
+    background: #ccc; /* Цвет фона */
+    color: #000; /* Цвет текста */
+   
+}
+
+table.info .bord {
+	border: 1px solid #000;
+}
+
+
+table.info .day {
+font-weight: bold;	
+font-size: 110%;
+}
+table.info td.date {
+font-size: 70%;
+border-bottom: 1px solid #ccc; /* Линия снизу */
+}
+
+table.info .date {
+font-size: 70%;
+}
+
+
+table.info .time {
+font-size: 70%;
+}
+
+table.info .header {
+	font-weight: bold;
+	font-size: 90%;
+}
+/*таблица журнала конец*/
+
+/*голова журнала событий*/
+
+table.info-head {
+	
+	border-collapse: collapse;
+	font-size: 100%;
+	margin: 10px  5px 10px 0px;
+	min-width: 100px;
+	max-width: 300px;
+	width: 100%;
+}
+
+table.info-head td {
+width: 90px;
+word-wrap: break-word;
+	text-align: left;
+	border-bottom: 1px solid #999; /*Линия снизу */
+}
+
+
+
+.leftlog-div{
+	/*border: 1px solid #000;*/
+ display: inline-block;
+ vertical-align: top;
+ margin-right: 50px;
+ text-align: left;
+/* padding: 5px 2px 5px 0px;*/
+
+
+}
+
+.rightlog-div{
+	/*border: 1px solid #000;*/ 
+ display: inline-block;
+ vertical-align: top;
+ margin-right: 50px;
+ text-align: left;
+/* padding: 5px 2px 5px 0px;*/
+
+
+}
+
+
+/*голова журнала событий конец*/
+
+/* показания датчиков гараж начало */
+table.comparative-table-garage  td{
+	border: 1px solid #999;
+	padding: 5px;
+	text-align: center;
+}
+
+/* показания датчиков гараж конец */
+
+
+/*меню*/
+/*#main-menu.navbar-default .navbar-toggle {
+  display: none !important;
+}*/
+
+.app-android h2 {
+    text-align: center;
+    margin: 15px auto;
+}
+
+.app-android img {
+  display: block;
+  margin: 0 auto;
+  height: 425px;
+  border: 1px solid #777;
+}
+
+/*calendarevents calendar-tadev*/
+#calendar-tadev table {
+  border-collapse: collapse;
+  width: 100%;
+}
+#calendar-tadev thead th {
+  border: 1px solid #a5a5a5;
+  background-color: #ABCDEF;
+  padding: 8px;
+}
+#calendar-tadev thead th.year-month {
+  background-color: #fff;
+  border: none;
+}
+#calendar-tadev tbody td {
+  height: 75px;
+}
+#calendar-tadev td {
+  width: 14.285%;
+  border: 1px solid #a5a5a5;
+  vertical-align: top;
+}
+#calendar-tadev td .main {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  align-content: flex-start;
+  flex-wrap: wrap;
+}
+#calendar-tadev td .main .event-item {
+  cursor: pointer;
+  border-radius: 3px;
+  background-color: #0ff;
+  padding: 2px 3px 0px 3px;
+  margin: 2px;
+  display: inline-block;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  min-width: 20px;
+  font-family: Lucida Console, monospace;
+}
+
+#calendar-tadev td div.date {
+  text-align: center;
+  color: #000;
+  padding: 2px;
+  font-size: 12px;
+  border-radius: 3px;
+  margin: 0 5px 5px 0;
+}
+#calendar-tadev td.empty-block {
+  background-color: #eee;
+}
+.circle-events {
+  width: 25px;
+  height: 25px;
+  display: inline-block;
+  border-radius: 50%;
+  margin: 0 15px -7px 0;
+}
+
+.contorl-head-calendar-events {
+  margin: 0 auto 10px;
+  text-align: center;
+}
+
+.contorl-head-calendar-events a {
+  width: 50px;
+  padding: 10px;
+}
+
+#calendar-tadev td.today {
+    border: 2px solid #f00;
+}
+
+.table-list-events .circle-events {
+    cursor: pointer;
+}
+.table-list-events .circle-events.all {
+    background-color: #fff;
+    border: 1px solid #333;
+}
+
+/* /calendarevents calendar-tadev*/

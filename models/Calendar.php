@@ -16,8 +16,8 @@ class Calendar extends Model
         
         while (true) {
             foreach ($calendarList->getItems() as $calendarListEntry) {
-                $result[] = $calendarListEntry->getSummary();
-//                $result[] = $calendarListEntry;
+//                $result[] = $calendarListEntry->getSummary();
+                $result[] = $calendarListEntry;
             }
             $pageToken = $calendarList->getNextPageToken();
             if ($pageToken) {
@@ -27,11 +27,14 @@ class Calendar extends Model
                 break;
             }
         }
+//        echo '<pre>';
+//        print_r($result);
+//        exit;
         return $result;
     }
     
     // $timeMin, $timeMax '2018-02-12T15:19:21+00:00'
-    public static function getListEvents($service, $calendarId = 'primary', $timeMin, $timeMax, $maxResults = 100)
+    public static function getListEvents($service, $calendar, $timeMin, $timeMax, $maxResults = 100)
     {
         $result = [];
         
@@ -43,7 +46,7 @@ class Calendar extends Model
             'timeMax' => $timeMax,
         );
         
-        $eventsData = $service->events->listEvents($calendarId, $optParams);
+        $eventsData = $service->events->listEvents($calendar->id, $optParams);
         $events = $eventsData->getItems();
         
         foreach ($events as $event) {
@@ -51,7 +54,17 @@ class Calendar extends Model
             if (empty($start)) {
                 $start = $event->start->date;
             }
+            $end = $event->end->dateTime;
+            if (empty($end)) {
+                $end = $event->end->date;
+            }
+            $eventData['calendar_description'] = $calendar->description;
+            $eventData['calendar_summary'] = $calendar->summary;
+            $eventData['calendar_backgroundColor'] = $calendar->backgroundColor;
+            $eventData['calendar_id'] = $calendar->id;
+            $eventData['id'] = $event->id;
             $eventData['start'] = $start;
+            $eventData['end'] = $start;
             $eventData['title'] = $event->getSummary();
             $eventData['description'] = $event->getDescription();
             $result[] = $eventData;

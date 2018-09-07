@@ -14,19 +14,28 @@ class CalendarController extends Controller
     
     public function actionIndex()
     {
-        
         $client = User::getClient();
         $service = new Google_Service_Calendar($client);
+        
+        // Получаем список календарей
         $calendarList = Calendar::getCalendarList($service);
         
         $timeMin = '2018-09-01T00:00:00+00:00';
         $timeMax = '2018-10-01T00:00:00+00:00';
         
-        $listEvents = Calendar::getListEvents($service, 'primary', $timeMin, $timeMax, 100);
-//        
+//        $request = Yii::$app->request;
+//        $calendarId = $request->get('id');
+
+        $listEvents = [];
+        foreach($calendarList as $calendar){
+            $eventData = Calendar::getListEvents($service, $calendar, $timeMin, $timeMax, 100);
+            $listEvents = array_merge($listEvents, $eventData);
+        }
+  
 //        echo '<pre>';
-//        print_r($calendarList);
+//        print_r($listEvents);
 //        echo '</pre>';
+//        exit;
         
         return $this->render('index', [
             'calendarList' => $calendarList,
