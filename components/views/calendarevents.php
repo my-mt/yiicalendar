@@ -65,16 +65,22 @@ function getProperty(id, property = 0, data) {
 // получаем строку arrIdrec с id записей
 // выводит модальное окно с таблицей записей
 function showEvent(arrIdrec) {
-    arrIdrec = arrIdrec.split(',');  
+    arrIdrec = arrIdrec.split(',');
+    var calendarDescription = JSON.parse(getProperty(arrIdrec[0], 'calendar_description', dataEvents));
+    if (calendarDescription) {
+        var summary = calendarDescription.settings.summary;
+    } else {
+        var summary = '';
+    }
+    
     var color_events;
     var date;
     var title;
     var table = '<table class="table table-striped table-hover table-sm">';
-    table += '<thead class="thead-inverse"><tr><th>#</th><th></th><th>начало</th><th>конец</th>';
+    table += '<thead class="thead-inverse"><tr><th>#</th><th>' + summary + '</th><th>начало</th><th>конец</th>';
     try {
-        var calendarData = JSON.parse(getProperty(arrIdrec[0], 'calendar_description', dataEvents)).data;
-        if(calendarData ) {
-            for(key in calendarData) {
+        if(calendarDescription.data) {
+            for(key in calendarDescription.data) {
                 table += '<th>' + key + '</th>';
             }
         } else {
@@ -106,7 +112,7 @@ function showEvent(arrIdrec) {
             console.log(rec["description"]);
             if(data) {
                 var str = '';
-                for(key in calendarData) {
+                for(key in calendarDescription.data) {
                     str += '<td>' + data[key] + '</td>';
                 }
                 if (str) {
@@ -183,17 +189,17 @@ $(function() {
             var sum = 0;
             dataEventsDayObj[eventId].forEach(function(item) {
                 // Получить из настроек календаря поле, которое надо писать в span
-                try {
-                    var calendarDescription = JSON.parse(getProperty(item, 'calendar_description', dataEvents));
-                    var summary = calendarDescription.settings.summary;
-                    var description = JSON.parse(getProperty(item, 'description', dataEvents));
-                    var value = description[summary];
-                    sum += value*1;
-                } catch (e) {
+//                try {
+//                    var calendarDescription = JSON.parse(getProperty(item, 'calendar_description', dataEvents));
+//                    var summary = calendarDescription.settings.summary;
+//                    var description = JSON.parse(getProperty(item, 'description', dataEvents));
+//                    var value = description[summary];
+//                    sum += value*1;
+//                } catch (e) {
                     // Если описание события не содержит строку json то берем из summary события
                     var value = getProperty(item, 'summary', dataEvents);
                     sum += value*1;
-                }
+//                }
             });
             var titleEvents = getProperty(dataEventsDayObj[eventId][0], 'calendar_summary', dataEvents); // получаем название события для title при наведении
             // добавление букв названия события в зависимости от ширины календаря
