@@ -65,7 +65,7 @@ class Calendar extends Model
             $eventData['id'] = $event->id;
             $eventData['start'] = $start;
             $eventData['end'] = $start;
-            $eventData['title'] = $event->getSummary();
+            $eventData['summary'] = $event->getSummary();
             $eventData['description'] = $event->getDescription();
             $result[] = $eventData;
         }

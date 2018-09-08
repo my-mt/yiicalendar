@@ -65,16 +65,30 @@ function getProperty(id, property = 0, data) {
 // получаем строку arrIdrec с id записей
 // выводит модальное окно с таблицей записей
 function showEvent(arrIdrec) {
-    arrIdrec = arrIdrec.split(',');
-    console.log(arrIdrec);
+    arrIdrec = arrIdrec.split(',');  
     var color_events;
     var date;
     var title;
     var table = '<table class="table table-striped table-hover table-sm">';
-    table += '<thead class="thead-inverse"><tr><th>#</th><th>Время</th><th>Заголовок</th><th>Данные</th></tr></thead><tbody>';
+    table += '<thead class="thead-inverse"><tr><th>#</th><th></th><th>начало</th><th>конец</th>';
+    try {
+        var calendarData = JSON.parse(getProperty(arrIdrec[0], 'calendar_description', dataEvents)).data;
+        if(calendarData ) {
+            for(key in calendarData) {
+                table += '<th>' + key + '</th>';
+            }
+        } else {
+            table += '<th>описание</th>';
+        }
+
+    } catch (e) {
+        table += '<th>описание</th>';
+    }
+    
+    table += '</tr></thead><tbody>';
     arrIdrec.forEach(function(item, i) {
         var rec = getProperty(item, 0, dataEvents);
-        console.log(rec);
+        // Заголовок модального окна
         if (i === 0) {
             color_events = rec["calendar_backgroundColor"];
             date = rec["start"].substring(0, 10);
@@ -83,22 +97,29 @@ function showEvent(arrIdrec) {
         }
         table += '<tr>';
         table += '<td>' + (i + 1) + '</td>';
+        table += '<td>' + rec["summary"] + '</td>';
         table += '<td>' + rec["start"].substring(11,16) + '</td>';
-        table += '<td>' + rec["title"] + '</td>';
-//        table += '<td>' + rec["price"] + '</td>';
-//        table += '<td>' + rec["note"] + '</td>';
+        table += '<td>' + rec["end"].substring(11,16) + '</td>';
 
-        var dataStr = '';
         try {
             var data = JSON.parse(rec["description"]);
-            for(key in data) {
-                dataStr += key + ': ' + data[key] + '<br>';
-            }  
+            console.log(rec["description"]);
+            if(data) {
+                var str = '';
+                for(key in calendarData) {
+                    str += '<td>' + data[key] + '</td>';
+                }
+                if (str) {
+                    table += str;
+                } else {
+                    table += '<td>' + rec["description"] + '</td>';
+                }
+            } else {
+                table += '<td>' + rec["description"] + '</td>';   
+            }
         } catch (e) {
-            dataStr = rec["description"];
+            table += '<td>' + rec["description"] + '</td>';
         }
-
-        table += '<td>' + dataStr + '</td>';
         table += '</tr>';
     });
     table += '</tbody></table>'; 
@@ -111,7 +132,7 @@ function showEvent(arrIdrec) {
 }
 
 var dataEvents = <?= json_encode($data_events) ?>;
-
+console.log(dataEvents);
 
 // функция строит календарь в блоке с id="calendar-tadev"
 $(function() {
@@ -155,16 +176,24 @@ $(function() {
                 dataEventsDayObj[item.calendar_id] = [];
             dataEventsDayObj[item.calendar_id].push(item.id);
         });
-        
-        console.log(dataEventsDayObj);
+
         var eventsList = '';
         for (eventId in dataEventsDayObj) {
             var color_events = getProperty(dataEventsDayObj[eventId][0], 'calendar_backgroundColor', dataEvents);
             var sum = 0;
             dataEventsDayObj[eventId].forEach(function(item) {
-                var value = getProperty(item, 'title', dataEvents);
-                console.log(value);
-                sum += value*1;
+                // Получить из настроек календаря поле, которое надо писать в span
+                try {
+                    var calendarDescription = JSON.parse(getProperty(item, 'calendar_description', dataEvents));
+                    var summary = calendarDescription.settings.summary;
+                    var description = JSON.parse(getProperty(item, 'description', dataEvents));
+                    var value = description[summary];
+                    sum += value*1;
+                } catch (e) {
+                    // Если описание события не содержит строку json то берем из summary события
+                    var value = getProperty(item, 'summary', dataEvents);
+                    sum += value*1;
+                }
             });
             var titleEvents = getProperty(dataEventsDayObj[eventId][0], 'calendar_summary', dataEvents); // получаем название события для title при наведении
             // добавление букв названия события в зависимости от ширины календаря
@@ -177,6 +206,9 @@ $(function() {
             if (widthTable < 560) letterTitle = 3;
             if (widthTable < 430) letterTitle = 2;
             if (widthTable < 380) letterTitle = 1;
+            
+            // Если sum NaN то не выводим вообще результат суммирования
+            if (isNaN(sum)) sum = 0;
             if (sum === 0) {
                 sum = titleEvents.substring(0, 5);
             } else { 
