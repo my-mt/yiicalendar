@@ -113,3 +113,23 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+.form-control.add-field {
+    width: 150px;
+    display: inline-block;
+}
+
+.add-element {
+    cursor: pointer;
+    font-weight: 600;
+    color: #337ab7;
+    border: 1px solid #2e6da4;
+    border-radius: 50%;
+    padding: 2px 6px;
+    margin-left: 4px;
+}
+
+.add-element:hover {
+    background-color: #337ab7;
+    color: #fff;
+}

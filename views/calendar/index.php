@@ -13,20 +13,6 @@ $this->title = 'Calendar';
 <div class="body-content">
 
     <div class="row">
-        <div class="col-md-3">
-            <table class="table">
-                <tr>
-                    <th>#</th>
-                    <th>События</th>
-                </tr>
-                <?php foreach ($calendarList as $k => $calendar) { ?>
-                <tr>
-                    <td><?= ++$k ?></td>
-                    <td><?= Html::a($calendar->summary, ['calendar/index', 'id' => $calendar->id], ['class' => 'profile-link']) ?></td>
-                </tr>
-                <?php } ?>
-            </table> 
-        </div>
         <div class="col-md-9">
 <!--            <pre>
                 <?php print_r($listEvents); ?>
@@ -60,6 +46,25 @@ $this->title = 'Calendar';
                 echo CalendareventsWidget::widget(['year' => $year, 'month' => $month, 'data_events' => $listEvents]);
                 ?>
             
+        </div>
+        <div class="col-md-3">
+            <table class="table">
+                <tr>
+                    <th>#</th>
+                    <th>События</th>
+                </tr>
+                <?php foreach ($calendarList as $k => $calendar) { ?>
+                <tr>
+                    <td><?= ++$k ?></td>
+                    <td>
+                        <?php
+                        echo $calendar->summary;
+                        echo Html::a(" edit", ['calendar/update-calendar', 'id' => $calendar->id], ['class' => 'profile-link']);
+                        ?>
+                    </td>
+                </tr>
+                <?php } ?>
+            </table> 
         </div>
 
     </div>

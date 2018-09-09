@@ -416,10 +416,10 @@ table.info {
 }
 
 table.info td {
-max-width: 110px;
-word-wrap: break-word;
-	text-align: center;
-	border-bottom: 1px solid #999; Линия снизу */
+    max-width: 110px;
+    word-wrap: break-word;
+    text-align: center;
+    border-bottom: 1px solid #999;
 }
 
 

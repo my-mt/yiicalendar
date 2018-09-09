@@ -91,7 +91,7 @@ function showEvent(arrIdrec) {
         table += '<th>описание</th>';
     }
     
-    table += '</tr></thead><tbody>';
+    table += '<th></th></tr></thead><tbody>';
     arrIdrec.forEach(function(item, i) {
         var rec = getProperty(item, 0, dataEvents);
         // Заголовок модального окна
@@ -126,6 +126,7 @@ function showEvent(arrIdrec) {
         } catch (e) {
             table += '<td>' + rec["description"] + '</td>';
         }
+        table += '<td><a href="/calendar/update-event?calendarId=' + rec["calendar_id"] + '&eventId=' + rec["id"] + '">edit</a></td>';
         table += '</tr>';
     });
     table += '</tbody></table>'; 

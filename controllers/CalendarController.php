@@ -65,10 +65,52 @@ class CalendarController extends Controller
         echo $client->getRefreshToken();
         echo '<br>';
         echo 'redirect ???';
-//        echo '==<pre>';
-//        print_r($client);
-//        echo '</pre>';
         exit;
+    }
+    
+    public function actionUpdateCalendar($id)
+    {
+        if ($calendar = Yii::$app->request->post()) {
+            $id = $calendar['id'];
+            $summary = $calendar['summary'];
+            $description = $calendar['description'];
+            if ($Etag = Calendar::updateCalendar($id, $summary, $description)) {
+                Yii::$app->session->setFlash('success', "Успех,  Etag=$Etag");
+            }
+        };
+
+        $calendar = Calendar::getCalendar($id);
+        
+        return $this->render('calendar-form', [
+            'id' => $id,
+            'summary' => $calendar->summary,
+            'description' => $calendar->description,
+        ]);
+    }
+    
+    public function actionUpdateEvent($calendarId, $eventId)
+    {
+        if ($calendar = Yii::$app->request->post()) {
+            $id = $calendar['id'];
+            $summary = $calendar['summary'];
+            $description = $calendar['description'];
+            if ($Etag = Calendar::updateEvent($id, $summary, $description)) {
+                Yii::$app->session->setFlash('success', "Успех,  Etag=$Etag");
+            }
+        };
+
+        $event = Calendar::getEvent($calendarId, $eventId);
+        
+        $calendar = Calendar::getCalendar($calendarId);
+        $calendarSetSummary = @json_decode($calendar->description)->settings->summary;
+        
+        return $this->render('event-form', [
+            'calendarId' => $calendarId,
+            'calendarSetSummary' => $calendarSetSummary,
+            'calendarSummary' => $calendar->summary,
+            'eventId' => $eventId,
+            'event' => $event,
+        ]);
     }
 
 }
