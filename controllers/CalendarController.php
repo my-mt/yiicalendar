@@ -62,10 +62,7 @@ class CalendarController extends Controller
         $client->authenticate($_GET['code']);
 
         $_SESSION['access_token'] = $client->getAccessToken();
-        echo $client->getRefreshToken();
-        echo '<br>';
-        echo 'redirect ???';
-        exit;
+        return $this->goHome();
     }
     
     public function actionUpdateCalendar($id)
@@ -104,12 +101,31 @@ class CalendarController extends Controller
         $calendar = Calendar::getCalendar($calendarId);
         $calendarSetSummary = @json_decode($calendar->description)->settings->summary;
         
+        if ($dateStart = $event->start->date)
+        $dateStart = $event->start->date;
+        if (!$dateStart) $dateStart = substr($event->start->dateTime, 0, 10);
+        
+        $dateStart = ($event->start->date) ? $event->start->date : substr($event->start->dateTime, 0, 10);
+        $dateEnd = ($event->end->date) ? $event->end->date : substr($event->end->dateTime, 0, 10);
+        
+        $timeStart = substr($event->start->dateTime, 11, 5);
+        $timeEnd = substr($event->end->dateTime, 11, 5);
+        
+        
+//        echo '<pre>';
+//        print_r($event);
+//        exit;
+        
         return $this->render('event-form', [
             'calendarId' => $calendarId,
             'calendarSetSummary' => $calendarSetSummary,
             'calendarSummary' => $calendar->summary,
             'eventId' => $eventId,
             'event' => $event,
+            'dateStart' => $dateStart,
+            'dateEnd' => $dateEnd,
+            'timeStart' => $timeStart,
+            'timeEnd' => $timeEnd,
         ]);
     }
 
