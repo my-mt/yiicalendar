@@ -83,6 +83,36 @@ $this->title = 'Event form';
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label">Описание</label>
+                <textarea class="form-control" name="description"><?= $event->description ?></textarea>
+            </div>
+            <?php
+            if(is_object($calendarFields)):
+                foreach($calendarFields as $field => $typeField) {
+                $type = 'text';
+                $data = json_decode($event->description);
+                switch ($typeField) {
+                    case 'int':
+                    case 'float':
+                        $type = "number";
+                        break;
+                    case 'time':
+                        $type = "time";
+                        break;
+                } 
+            ?>
+            
+            <div class="form-group description">
+                <label class="control-label description-filed"><?= $field ?></label>
+                <input class="form-control description-value" type="<?= $type ?>" name="<?= $field ?>" value="<?= @$data->$field ?>">
+            </div>
+            
+            <?php } endif; ?>
+            <div class="row">
+                <div class="col-xs-6">
+                </div>
+            </div>
+            <div class="form-group">
             <button form="w0" type="submit" class="btn btn-primary">Сохранить</button>
             </div>
             <?php ActiveForm::end(); ?>     
@@ -90,3 +120,23 @@ $this->title = 'Event form';
         </div>
     </div>
 </div>
+
+<script>
+
+    // Добавлнеие обработчика изменения изменения input
+    $(".description-value").change(function() {
+        makeDescriptionStr();
+    });
+
+    
+    // Функция формирует строку json для description
+    function makeDescriptionStr() {
+        var data = {}
+        $('div.form-group.description').each(function() {
+            data[$(this).children('.description-filed').text()] = $(this).children('.description-value').val();
+
+        });
+        console.log(data);
+        $('textarea[name="description"]').val(JSON.stringify(data));
+    }
+</script>

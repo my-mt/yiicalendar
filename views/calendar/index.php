@@ -14,38 +14,12 @@ $this->title = 'Calendar';
 
     <div class="row">
         <div class="col-md-9">
-<!--            <pre>
-                <?php print_r($listEvents); ?>
-            </pre>-->
-                <?php
-                $year = '2018';
-                $month = '9';
-                
-//                $data_events = [];
-//                foreach($listEvents as $events){
-//                    $datat['']
-//                    
-//                }
-                
-                $data_events = [
-                    [
-                        'id' => 4450,
-                        'event_id' => 1037,
-                        'user_id' => 39,
-                        'ote' => '',
-                        'date_time' => 1536267223,
-                        'result' => 25,
-                        'price' => 0,
-                        'additionally' => 'Примечание',
-                        'source' => '',
-                        'title_events' => 'Название календаря',
-                        'color_events' => '#3800a8',
-                    ]
-                ];
+        <?php
+        $year = '2018';
+        $month = '9';
 
-                echo CalendareventsWidget::widget(['year' => $year, 'month' => $month, 'data_events' => $listEvents]);
-                ?>
-            
+        echo CalendareventsWidget::widget(['year' => $year, 'month' => $month, 'data_events' => $listEvents]);
+        ?>
         </div>
         <div class="col-md-3">
             <table class="table">
@@ -60,6 +34,7 @@ $this->title = 'Calendar';
                         <?php
                         echo $calendar->summary;
                         echo Html::a(" edit", ['calendar/update-calendar', 'id' => $calendar->id], ['class' => 'profile-link']);
+                        echo Html::a(" add", ['calendar/insert-event', 'calendarId' => $calendar->id], ['class' => 'profile-link']);
                         ?>
                     </td>
                 </tr>

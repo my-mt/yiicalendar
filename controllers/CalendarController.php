@@ -87,11 +87,12 @@ class CalendarController extends Controller
     
     public function actionUpdateEvent($calendarId, $eventId)
     {
-        if ($calendar = Yii::$app->request->post()) {
-            $id = $calendar['id'];
-            $summary = $calendar['summary'];
-            $description = $calendar['description'];
-            if ($Etag = Calendar::updateEvent($id, $summary, $description)) {
+        if ($data = Yii::$app->request->post()) {
+            $calendarId = $data['calendarId'];
+            $eventId = $data['eventId'];
+            $summary = $data['summary'];
+            $description = $data['description'];
+            if ($Etag = Calendar::updateEvent($calendarId, $eventId, $summary, $description)) {
                 Yii::$app->session->setFlash('success', "Успех,  Etag=$Etag");
             }
         };
@@ -99,27 +100,21 @@ class CalendarController extends Controller
         $event = Calendar::getEvent($calendarId, $eventId);
         
         $calendar = Calendar::getCalendar($calendarId);
-        $calendarSetSummary = @json_decode($calendar->description)->settings->summary;
-        
-        if ($dateStart = $event->start->date)
-        $dateStart = $event->start->date;
-        if (!$dateStart) $dateStart = substr($event->start->dateTime, 0, 10);
+        $calendarDescription = @json_decode($calendar->description);
+        $calendarSetSummary = @$calendarDescription->settings->summary;
+        $calendarFields = @$calendarDescription->data;
         
         $dateStart = ($event->start->date) ? $event->start->date : substr($event->start->dateTime, 0, 10);
         $dateEnd = ($event->end->date) ? $event->end->date : substr($event->end->dateTime, 0, 10);
         
         $timeStart = substr($event->start->dateTime, 11, 5);
         $timeEnd = substr($event->end->dateTime, 11, 5);
-        
-        
-//        echo '<pre>';
-//        print_r($event);
-//        exit;
-        
+     
         return $this->render('event-form', [
             'calendarId' => $calendarId,
-            'calendarSetSummary' => $calendarSetSummary,
+            'calendarSetSummary' => $calendarSetSummary, // настройки календаря - название основного поля (summary события)
             'calendarSummary' => $calendar->summary,
+            'calendarFields' => $calendarFields,
             'eventId' => $eventId,
             'event' => $event,
             'dateStart' => $dateStart,
@@ -127,6 +122,13 @@ class CalendarController extends Controller
             'timeStart' => $timeStart,
             'timeEnd' => $timeEnd,
         ]);
+    }
+    
+    public function actionInsertEvent($calendarId)
+    {
+
+        echo Calendar::insertEvent($calendarId);
+        exit;
     }
 
 }
