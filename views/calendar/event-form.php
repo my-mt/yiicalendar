@@ -19,10 +19,10 @@ $this->title = 'Event form';
         <div class="col-md-6">
             <?php $form = ActiveForm::begin(); ?>
             <input type="hidden" name="calendarId" value="<?= $calendarId ?>">
-            <input type="hidden" name="eventId" value="<?= $eventId ?>">
+            <input type="hidden" name="eventId" value="<?= @$eventId ?>">
             <div class="form-group">
                 <label class="control-label"><?= $calendarSetSummary ?></label>
-                <input class="form-control" type="text" name="summary" value="<?= $event->summary ?>">
+                <input class="form-control" type="text" name="summary" value="<?= @$event->summary ?>">
             </div>
             <div class="row">
                 <div class="col-xs-6">
@@ -40,9 +40,11 @@ $this->title = 'Event form';
                             ]
                         ]);
                         ?>
+                        <div class="event-time-field">
                         <?php
                         echo TimePicker::widget([
                             'name' => 'timeStart',
+                            'id' => 'time-start',
                             'value' => $timeStart,
                             'pluginOptions' => [
                                 'showSeconds' => false,
@@ -51,6 +53,7 @@ $this->title = 'Event form';
                             ]
                         ]);
                         ?>
+                        </div>
                     </div>
                 </div>
                 <div class="col-xs-6">
@@ -68,9 +71,11 @@ $this->title = 'Event form';
                             ]
                         ]);
                         ?>
+                        <div class="event-time-field">
                         <?php
                         echo TimePicker::widget([
                             'name' => 'timeEnd',
+                            'id' => 'time-end',
                             'value' => $timeEnd,
                             'pluginOptions' => [
                                 'showSeconds' => false,
@@ -79,18 +84,23 @@ $this->title = 'Event form';
                             ]
                         ]);
                         ?>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="form-group">
+                <label class="control-label">Весь день</label>
+                <input type="checkbox" name="all-day" class="form-check-input" id="all-day" value="1" <?= ($timeStart) ? '' : 'checked' ?> >
+            </div>
+            <div class="form-group">
                 <label class="control-label">Описание</label>
-                <textarea class="form-control" name="description"><?= $event->description ?></textarea>
+                <textarea class="form-control" name="description"><?= @$event->description ?></textarea>
             </div>
             <?php
             if(is_object($calendarFields)):
                 foreach($calendarFields as $field => $typeField) {
                 $type = 'text';
-                $data = json_decode($event->description);
+                $data = @json_decode($event->description);
                 switch ($typeField) {
                     case 'int':
                     case 'float':
@@ -122,6 +132,7 @@ $this->title = 'Event form';
 </div>
 
 <script>
+jQuery(document).ready(function(){
 
     // Добавлнеие обработчика изменения изменения input
     $(".description-value").change(function() {
@@ -139,4 +150,30 @@ $this->title = 'Event form';
         console.log(data);
         $('textarea[name="description"]').val(JSON.stringify(data));
     }
+    
+    
+
+    function hideTimeField() {
+        $('.event-time-field').hide();
+    }
+    function showTimeField() {
+        $('.event-time-field').show();
+    }
+
+    $('#all-day').on( "click", function() {
+        if($(this).is(":checked")) {
+            hideTimeField();
+        }
+        else {
+            showTimeField()
+        }
+    });
+    
+    if ($('#all-day').is(':checked')) {
+        hideTimeField() 
+    }
+    
+    makeDescriptionStr();
+
+});
 </script>

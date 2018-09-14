@@ -15,8 +15,6 @@ $this->title = 'Calendar';
     <div class="row">
         <div class="col-md-9">
         <?php
-        $year = '2018';
-        $month = '9';
 
         echo CalendareventsWidget::widget(['year' => $year, 'month' => $month, 'data_events' => $listEvents]);
         ?>
@@ -26,6 +24,7 @@ $this->title = 'Calendar';
                 <tr>
                     <th>#</th>
                     <th>События</th>
+                    <th></th>
                 </tr>
                 <?php foreach ($calendarList as $k => $calendar) { ?>
                 <tr>
@@ -33,8 +32,10 @@ $this->title = 'Calendar';
                     <td>
                         <?php
                         echo $calendar->summary;
-                        echo Html::a(" edit", ['calendar/update-calendar', 'id' => $calendar->id], ['class' => 'profile-link']);
-                        echo Html::a(" add", ['calendar/insert-event', 'calendarId' => $calendar->id], ['class' => 'profile-link']);
+                        echo '</td><td>';
+                        echo Html::a("", ['calendar/update-calendar', 'id' => $calendar->id], ['class' => 'profile-link glyphicon glyphicon-cog']);
+                        echo '&nbsp;';
+                        echo Html::a("", ['calendar/insert-event', 'calendarId' => $calendar->id], ['class' => 'profile-link glyphicon glyphicon-plus-sign']);
                         ?>
                     </td>
                 </tr>

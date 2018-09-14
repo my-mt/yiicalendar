@@ -20,8 +20,26 @@ class CalendarController extends Controller
         // Получаем список календарей
         $calendarList = Calendar::getCalendarList($service);
         
-        $timeMin = '2018-09-01T00:00:00+00:00';
-        $timeMax = '2018-10-01T00:00:00+00:00';
+        $month = Yii::$app->request->get('month');
+        $year = Yii::$app->request->get('year');
+        
+        if(!$month || !$year) {
+            $month = date('m', time());
+            $year = date('Y', time());
+        }
+        
+        if ($month == '12') {
+            $monthEnd = 1;
+            $yearEnd = $yearEnd + 1;
+        } else {
+            $monthEnd = $month + 1;
+            $yearEnd = $year;
+        }
+        if ($monthEnd < 10)
+            $monthEnd = '0' . $monthEnd;
+
+        $timeMin = $year.'-'.$month.'-01T00:00:00+00:00';
+        $timeMax = $yearEnd.'-'.$monthEnd.'-01T00:00:00+00:00';
         
 //        $request = Yii::$app->request;
 //        $calendarId = $request->get('id');
@@ -39,7 +57,9 @@ class CalendarController extends Controller
         
         return $this->render('index', [
             'calendarList' => $calendarList,
-            'listEvents' => $listEvents
+            'listEvents' => $listEvents,
+            'year' => $year,
+            'month' => $month,
         ]);
     }
 
@@ -62,7 +82,7 @@ class CalendarController extends Controller
         $client->authenticate($_GET['code']);
 
         $_SESSION['access_token'] = $client->getAccessToken();
-        return $this->goHome();
+        return $this->redirect(Yii::$app->request->referrer);
     }
     
     public function actionUpdateCalendar($id)
@@ -88,12 +108,9 @@ class CalendarController extends Controller
     public function actionUpdateEvent($calendarId, $eventId)
     {
         if ($data = Yii::$app->request->post()) {
-            $calendarId = $data['calendarId'];
-            $eventId = $data['eventId'];
-            $summary = $data['summary'];
-            $description = $data['description'];
-            if ($Etag = Calendar::updateEvent($calendarId, $eventId, $summary, $description)) {
-                Yii::$app->session->setFlash('success', "Успех,  Etag=$Etag");
+            if ($event = Calendar::updateEvent($data)) {
+                Yii::$app->session->setFlash('success', "Успех,  <a href='$event[1]'>Ссылка на событие в Google calendar</a>");
+                return $this->redirect(['calendar/update-event', 'calendarId' =>  $data['calendarId'], 'eventId' => $event[0]]);
             }
         };
 
@@ -126,9 +143,41 @@ class CalendarController extends Controller
     
     public function actionInsertEvent($calendarId)
     {
+         if ($data = Yii::$app->request->post()) {
+            if ($event = Calendar::insertEvent($data)) {
+                Yii::$app->session->setFlash('success', "Успех,  <a href='$event[1]'>Ссылка на событие в Google calendar</a>");
+                return $this->redirect(['calendar/update-event', 'calendarId' =>  $data['calendarId'], 'eventId' => $event[0]]);
+            }
+        };
 
-        echo Calendar::insertEvent($calendarId);
-        exit;
+        $calendar = Calendar::getCalendar($calendarId);
+        $calendarDescription = @json_decode($calendar->description);
+        $calendarSetSummary = @$calendarDescription->settings->summary;
+        $calendarFields = @$calendarDescription->data;
+        
+        $dateStart = date('Y-m-d', time());
+        $dateEnd = $dateStart;
+        
+        $timeStart = date('H:i:s', time());
+        $timeEnd = $timeStart;
+     
+        return $this->render('event-form', [
+            'calendarId' => $calendarId,
+            'calendarSetSummary' => $calendarSetSummary, // настройки календаря - название основного поля (summary события)
+            'calendarSummary' => $calendar->summary,
+            'calendarFields' => $calendarFields,
+
+            'dateStart' => $dateStart,
+            'dateEnd' => $dateEnd,
+            'timeStart' => $timeStart,
+            'timeEnd' => $timeEnd,
+        ]);
+    }
+    
+    public function actionDeleteEvent($calendarId, $eventId)
+    {
+        echo Calendar::deleteEvent($calendarId, $eventId);
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
 }

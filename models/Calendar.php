@@ -7,6 +7,7 @@ use yii\base\Model;
 use Google_Client;
 use Google_Service_Calendar;
 use Google_Service_Calendar_Event;
+use Google_Service_Calendar_EventDateTime;
 
 class Calendar extends Model
 {
@@ -100,52 +101,73 @@ class Calendar extends Model
     }
     
     // Редактирование события
-    public static function updateEvent($calendarId, $eventId, $summary, $description)
+    public static function updateEvent($data)
     {   
+//        echo '<pre>';
+//        print_r($data);
+//        exit;
         $service = new Google_Service_Calendar(User::getClient());
-        $event = $service->events->get($calendarId, $eventId);
-        $event->setSummary($summary);
-        $event->setDescription($description);
-        $updatedEvent = $service->events->update($calendarId, $event->getId(), $event);
+        $event = $service->events->get($data['calendarId'], $data['eventId']);
+        $event->setSummary($data['summary']);
+        $event->setDescription($data['description']);
+        $start = new Google_Service_Calendar_EventDateTime();
+        $end = new Google_Service_Calendar_EventDateTime();
+        
+        if (@$data['all-day']) {
+            $start->setDate($data['dateStart']);
+            $end->setDate($data['dateEnd']);
+        } else {
+            $start->setDateTime($data['dateStart'].'T'.$data['timeStart'].':00+03:00');
+            $end->setDateTime($data['dateEnd'].'T'.$data['timeEnd'].':00+03:00');
+        }
+        
+        $event->setStart($start);
+        $event->setEnd($end);
+        
+        $updatedEvent = $service->events->update($data['calendarId'], $event->getId(), $event);
 
-        return $updatedEvent->getUpdated();
+        return [$event->id, $event->htmlLink];
     }
     
     // Создание события
-    public static function insertEvent($calendarId)
+    public static function insertEvent($data)
     {   
-        $service = new Google_Service_Calendar(User::getClient());
-        $event = new Google_Service_Calendar_Event(array(
-          'summary' => 'Google I/O 2015',
-          'location' => '800 Howard St., San Francisco, CA 94103',
-          'description' => 'A chance to hear more about Google\'s developer products.',
-          'start' => array(
-            'dateTime' => '2018-09-14T09:00:00-07:00',
-            'timeZone' => 'America/Los_Angeles',
-          ),
-          'end' => array(
-            'dateTime' => '2018-09-14T17:00:00-07:00',
-            'timeZone' => 'America/Los_Angeles',
-          ),
-          'recurrence' => array(
-            'RRULE:FREQ=DAILY;COUNT=2'
-          ),
-          'attendees' => array(
-            array('email' => 'lpage@example.com'),
-            array('email' => 'sbrin@example.com'),
-          ),
-          'reminders' => array(
-            'useDefault' => FALSE,
-            'overrides' => array(
-              array('method' => 'email', 'minutes' => 24 * 60),
-              array('method' => 'popup', 'minutes' => 10),
-            ),
-          ),
-        ));
 
-        $calendarId = $calendarId;
-        $event = $service->events->insert($calendarId, $event);
-        return $event->htmlLink;
+        $service = new Google_Service_Calendar(User::getClient());
+        
+        if (@$data['all-day']) {
+            $event = new Google_Service_Calendar_Event(array(
+            'summary' => $data['summary'],
+            'description' => $data['description'],
+            'start' => array(
+                'date' => $data['dateStart'],
+            ),
+            'end' => array(
+                'date' => $data['dateEnd'],
+            ),
+            ));
+        } else {
+            $event = new Google_Service_Calendar_Event(array(
+            'summary' => $data['summary'],
+            'description' => $data['description'],
+            'start' => array(
+                'dateTime' => $data['dateStart'].'T'.$data['timeStart'].':00+03:00',
+            ),
+            'end' => array(
+                'dateTime' => $data['dateEnd'].'T'.$data['timeEnd'].':00+03:00',
+            ),
+            ));
+        }
+
+        $event = $service->events->insert($data['calendarId'], $event);
+        return [$event->id, $event->htmlLink];
+    }
+    
+    // Удаление события
+    public static function deleteEvent($calendarId, $eventId)
+    {
+        $service = new Google_Service_Calendar(User::getClient());
+        $service->events->delete($calendarId, $eventId);
     }
 
 }

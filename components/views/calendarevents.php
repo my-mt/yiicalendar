@@ -29,9 +29,9 @@ switch ($month) {
 
 ?>
 <div class="contorl-head-calendar-events">
-    <a href="/main/calendarevents.html?year=<?= $year_prev ?>&month=<?= $month_prev ?>" class="glyphicon glyphicon-menu-left"></a>
+    <a href="/calendar?year=<?= $year_prev ?>&month=<?= $month_prev ?>" class="glyphicon glyphicon-menu-left"></a>
     <strong class="year-month"><?= $month_arr[$month - 1] ?> <?= $year?></strong>
-    <a href="/main/calendarevents.html?year=<?= $year_next ?>&month=<?= $month_next ?>" class="glyphicon glyphicon-menu-right"></a>
+    <a href="/calendar?year=<?= $year_next ?>&month=<?= $month_next ?>" class="glyphicon glyphicon-menu-right"></a>
 </div>
 <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -53,6 +53,14 @@ switch ($month) {
 <div id="calendar-tadev"></div>
 
 <script>
+function confirmDelete() {
+    if (confirm("Вы подтверждаете удаление?")) {
+            return true;
+    } else {
+            return false;
+    }
+}
+
 // функция, которая будет выдавать любое property по id записи (которое так же является свойством объекта - элемента массива данных data
 function getProperty(id, property = 0, data) {
     var arr = data.filter(function(item) {
@@ -126,7 +134,8 @@ function showEvent(arrIdrec) {
         } catch (e) {
             table += '<td>' + rec["description"] + '</td>';
         }
-        table += '<td><a href="/calendar/update-event?calendarId=' + rec["calendar_id"] + '&eventId=' + rec["id"] + '">edit</a></td>';
+        table += '<td><a class="glyphicon glyphicon-cog" href="/calendar/update-event?calendarId=' + rec["calendar_id"] + '&eventId=' + rec["id"] + '"></a>&nbsp;&nbsp;';
+        table += '<a  onclick="return confirmDelete()" class="glyphicon glyphicon-remove-circle" href="/calendar/delete-event?calendarId=' + rec["calendar_id"] + '&eventId=' + rec["id"] + '"></a></td>';
         table += '</tr>';
     });
     table += '</tbody></table>'; 
@@ -247,113 +256,6 @@ $(function() {
     var calendar2 = '<table><thead><tr><th>Пн</th><th>Вт</th><th>Ср</th><th>Чт</th><th>Пт</th><th>Сб</th><th>Вс</th></tr></thead>';
     calendar2 += '<tbody>' + calendar1 + '</tbody></table>';
     $("#calendar-tadev").append(calendar2);
-    
-    // Таблица после календаря
-    // создать объект с событиями и цветом, которые есть в месяце
-    var arrEventsNameColor = {};
-    for (var i = 0; i < dataEvents.length; i++) {
-        arrEventsNameColor[dataEvents[i].event_id] = {
-            'title_events': dataEvents[i].title_events,
-            'color_events': dataEvents[i].color_events
-        }
-    }
-
-    //var table = '<div class="table-responsive"><br><table class="table table-striped"><thead><tr><th>#</th><th>Название</th><th>Рез</th><th>ср</th><th>УЕ</th><th>ср</th><th>Зап</th><tr></thead>';
-    var table = '<div class="table-responsive table-list-events"><br><table class="table table-striped"><thead><tr><th><span class="circle-events all"></span></th><th>Название</th><th>Рез</th><th>УЕ</th><th>Зап</th><tr></thead>';
-    for (key in arrEventsNameColor) {
-        table += '<tr>';
-        table += '<td><span style="background-color: ' + arrEventsNameColor[key].color_events + '" class="circle-events" data-title="' + arrEventsNameColor[key].title_events + '"><span></td>';
-        table += '<td><a href="/main/recnote.html?event_id=' + key +'">';
-        table += arrEventsNameColor[key].title_events;
-        table += '</a></td>';
-        var eventsArrRec = dataEvents.filter(function(data) {
-            return (data.event_id == key);
-        });
-        var eventResult = eventsArrRec.reduce(function(sum, current) {
-            return sum + current.result*1;
-        }, 0);
-        var eventPrice = eventsArrRec.reduce(function(sum, current) {
-            return sum + current.price*1;
-        }, 0);
-        
-        // var evLength = eventsArrRec.length;
-        table += '<td>';
-        if (eventResult > 0) {
-            table += eventResult;
-        } else {
-            table += '-';
-        }
-        table += '</td>';
-        // среднее значение Результата
-        //table += '<td>';
-        //if (eventResult > 0) {
-        //    table += (eventResult/evLength).toFixed(1);
-        //} else {
-        //    table += '-';
-        //}
-        //table += '</td>';
-        table += '<td>';
-        if (eventPrice > 0) {
-            table += eventPrice;
-        } else {
-            table += '-';
-        }
-        table += '</td>';
-        // среднее значение УЕ
-        //table += '<td>';
-        //if (eventPrice > 0) {
-        //    table += (eventPrice/evLength).toFixed(1);
-        //} else {
-        //    table += '-';
-        //}
-        //table += '</td>';
-        table += '<td>';
-        table += eventsArrRec.length;
-        table += '</td>';
-        table += '</tr>';
-    }
-    table += '</table></div>';
-    $("#calendar-tadev").after(table);
-    
-    
-    // скрывает все записи в календаке кроме записей событи title
-    function hideRecEvent(title) {
-        $('#calendar-tadev .event-item').show();
-        $('#calendar-tadev .event-item').each(function() {
-            if (title != $(this).attr('title')) {
-                $(this).hide();
-            }
-        });
-    }
-    
-    // показывает все записи (если они были скрыты фукцией hideRecEvent(title)
-    function showRecEvent() {
-        $('#calendar-tadev .event-item').show();
-    }
-    
-    $('.table-list-events .circle-events').click(function(){
-        hideRecEvent($(this).attr('data-title'));
-    });
-    
-    $('.table-list-events .circle-events.all').click(function(){
-        showRecEvent();
-    });
-    
-    $('#calendar-tadev .event-item').hover(
-    function() {
-        var title =  $(this).attr('title');
-        $('#calendar-tadev .event-item').each(function() {
-            if (title != $(this).attr('title')) {
-                $(this).css('visibility', 'hidden');
-            }
-        });
-    }, function() {
-       $('#calendar-tadev .event-item').each(function() {
-            $(this).css('visibility', 'visible');
-        });
-    }
-  );
- 
-     
+      
 });
 </script>
