@@ -143,11 +143,14 @@ jQuery(document).ready(function(){
     // Функция формирует строку json для description
     function makeDescriptionStr() {
         var data = {}
+        var noData = true;
         $('div.form-group.description').each(function() {
+            noData = false;
             data[$(this).children('.description-filed').text()] = $(this).children('.description-value').val();
-
         });
-        console.log(data);
+        // если календарь не содержит разметку полей (занчения data в description)
+        if (noData) return;
+        
         $('textarea[name="description"]').val(JSON.stringify(data));
     }
     

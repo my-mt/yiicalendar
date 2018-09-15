@@ -108,9 +108,13 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     
     public static function getClient()
     {
-        $clientSecrets = '../config/api/client_secrets.json';
-        if (!file_exists($clientSecrets))
-            return;
+        $clientSecrets = __DIR__ . '/../config/api/client_secrets.json';
+        if (!file_exists($clientSecrets)) {
+            echo '!file_exists';
+            echo '<br>';
+            echo $clientSecrets;
+            exit;
+        }
 
         $client = new Google_Client();
         $client->setApplicationName('Google Calendar API PHP my test');

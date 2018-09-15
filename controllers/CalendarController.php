@@ -15,6 +15,12 @@ class CalendarController extends Controller
     public function actionIndex()
     {
         $client = User::getClient();
+        
+        if (!$client) {
+            echo '!$client';
+            exit;
+        }
+        
         $service = new Google_Service_Calendar($client);
         
         // Получаем список календарей
@@ -49,11 +55,6 @@ class CalendarController extends Controller
             $eventData = Calendar::getListEvents($service, $calendar, $timeMin, $timeMax, 100);
             $listEvents = array_merge($listEvents, $eventData);
         }
-  
-//        echo '<pre>';
-//        print_r($listEvents);
-//        echo '</pre>';
-//        exit;
         
         return $this->render('index', [
             'calendarList' => $calendarList,
@@ -65,14 +66,14 @@ class CalendarController extends Controller
 
     public function actionLogin()
     {
-//        echo '<pre>';
-//        print_r($_GET);
-//        echo '</pre>';
-        
-        $clientSecrets = '../config/api/client_secrets.json';
-        if (!file_exists($clientSecrets)) 
-            return;
-        
+        $clientSecrets = __DIR__ . '/../config/api/client_secrets.json';
+        if (!file_exists($clientSecrets)) {
+            echo '!file_exists';
+            echo '<br>';
+            echo $clientSecrets;
+            exit;
+        }
+
         $client = new Google_Client();
         $client->setApplicationName('Google Calendar API PHP my test');
         $client->setScopes(Google_Service_Calendar::CALENDAR_READONLY);
@@ -82,7 +83,17 @@ class CalendarController extends Controller
         $client->authenticate($_GET['code']);
 
         $_SESSION['access_token'] = $client->getAccessToken();
-        return $this->redirect(Yii::$app->request->referrer);
+        
+        // если доступен getRefreshToken() это значит, что это первый вход после разрешения доступа пользователя  к своему аккаунту. В этом случае делаем переход на главную.
+        // если refreshToken отсутствует, то это значит, что просто закончился срок действия access_token (примерно 3600 c), в этом случае возвращаемся на предыдущую страницу.
+        
+        Yii::$app->session->setFlash('warning', 'RefreshToken ' . $client->getRefreshToken());
+
+        if ($client->getRefreshToken()) {
+            return $this->goHome();
+        } else {
+            return $this->redirect(Yii::$app->request->referrer);
+        }
     }
     
     public function actionUpdateCalendar($id)
@@ -180,4 +191,16 @@ class CalendarController extends Controller
         return $this->redirect(Yii::$app->request->referrer);
     }
 
+    public static function arrayToStr($arr, $pad = '')
+    {
+        $str = '';
+        foreach ($arr as $k => $v) {
+            if (is_object($v) || is_array($v)) {
+                $str .= $pad . $k . "<br>" . self::arrayToStr($v, $pad . '&nbsp&nbsp&nbsp&nbsp&nbsp');
+            } else {
+                $str .= $pad . $k . ' => ' . $v . "<br>";
+            }
+        }
+        return $str;
+    }
 }

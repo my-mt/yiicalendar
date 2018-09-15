@@ -71,6 +71,10 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+        $_SESSION = [];
+        Yii::$app->session->setFlash('success', "Очистка сессии");
+        return $this->goHome();
+        
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
