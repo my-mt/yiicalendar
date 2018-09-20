@@ -32,7 +32,7 @@ $this->title = 'Event form';
                         echo DatePicker::widget([
                             'name' => 'dateStart',
                             'value' => $dateStart,
-                            'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                            'type' => DatePicker::TYPE_INPUT,
                             'pluginOptions' => [
                                 'orientation' => 'bottom left',
                                 'format' => 'yyyy-mm-dd',
@@ -63,9 +63,9 @@ $this->title = 'Event form';
                         echo DatePicker::widget([
                             'name' => 'dateEnd',
                             'value' => $dateEnd,
-                            'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                            'type' => DatePicker::TYPE_INPUT,
                             'pluginOptions' => [
-                                'orientation' => 'bottom left',
+                                'orientation' => 'bottom right',
                                 'format' => 'yyyy-mm-dd',
                                 'autoclose' => true,
                             ]
