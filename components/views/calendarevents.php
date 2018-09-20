@@ -83,7 +83,7 @@ function showEvent(arrIdrec) {
     var color_events;
     var date;
     var title;
-    var table = '<table class="table table-striped table-hover table-sm">';
+    var table = '<div class="table-responsive"><table class="table table-striped table-hover table-sm">';
     table += '<thead class="thead-inverse"><tr><th>#</th><th>' + summary + '</th><th>начало</th><th>конец</th>';
     try {
         if(calendarDescription.data) {
@@ -137,7 +137,7 @@ function showEvent(arrIdrec) {
         table += '<a  onclick="return confirmDelete()" class="glyphicon glyphicon-remove-circle" href="<?= $siteUrl ?>/calendar/delete-event?calendarId=' + rec["calendar_id"] + '&eventId=' + rec["id"] + '"></a></td>';
         table += '</tr>';
     });
-    table += '</tbody></table>'; 
+    table += '</tbody></table></div>'; 
     $("#eventModal .modal-body #table").html('').html(table);
 
 
