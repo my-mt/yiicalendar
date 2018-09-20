@@ -59,11 +59,17 @@ $fieldType = [
                 <span id="add-field" class="add-element">+</span>
                 <?php
                 if (is_object(@$descriptionArr->data)):
-                    foreach ($descriptionArr->data as $k => $v) {
+                    foreach ($descriptionArr->data as $title => $type) {
                         ?>
                         <p>
-                            <input class="form-control add-field" type="text" name="" value="<?= $k ?>">
-                            <input class="form-control add-field" type="text" name="" value="<?= $v ?>">
+                            <input class="form-control add-field" type="text" name="" value="<?= $title ?>">
+                            <select class="form-control add-field" name="">
+                                <?php foreach ($fieldType as $k => $v) {
+                                    $selected = ($k == $type) ? 'selected ' : '';
+                                    ?>
+                                    <option <?=$selected ?>value="<?= $k ?>"><?= $v ?></option>
+                                <?php } ?>
+                            </select>
                         </p>
                         <?php
                     }
@@ -78,21 +84,26 @@ $fieldType = [
 </div>
 
 <script>
+    // Добавлнеие обработчика изменения уже имеющихся select
+    $(".add-field-sec select").change(function() {
+        makeDescriptionStr();
+    });
+        
     // Добавление пары поле, тип
     $( "#add-field" ).click(function() {
         var tpl = $('#tpl-select-type');
         $('.add-field-sec').append(tpl.html());
-        // Добавлнеие обработчика изменения изменения select
+        // Добавлнеие обработчика изменения select
         $(".add-field-sec select").last().change(function() {
             makeDescriptionStr();
         });
-        // Добавлнеие обработчика изменения изменения input
+        // Добавлнеие обработчика изменения input
         $(".add-field-sec input").last().change(function() {
             makeDescriptionStr();
         });
     });
     
-    // Добавлнеие обработчика изменения изменения input
+    // Добавлнеие обработчика изменения input
     $("#settings-summary").last().change(function() {
         makeDescriptionStr();
     });
