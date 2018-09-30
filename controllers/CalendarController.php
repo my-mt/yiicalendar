@@ -22,7 +22,7 @@ class CalendarController extends Controller
         }
         
         $service = new Google_Service_Calendar($client);
-        
+
         // Получаем список календарей
         $calendarList = Calendar::getCalendarList($service);
         
@@ -87,12 +87,15 @@ class CalendarController extends Controller
         // если доступен getRefreshToken() это значит, что это первый вход после разрешения доступа пользователя  к своему аккаунту. В этом случае делаем переход на главную.
         // если refreshToken отсутствует, то это значит, что просто закончился срок действия access_token (примерно 3600 c), в этом случае возвращаемся на предыдущую страницу.
         
-        Yii::$app->session->setFlash('warning', 'RefreshToken ' . $client->getRefreshToken());
+        
 
         if ($client->getRefreshToken()) {
+            Yii::$app->session->setFlash('warning', 'Доступ к календарю предоставлен<br> ' . 'RefreshToken' . $client->getRefreshToken());
             return $this->goHome();
         } else {
-            return $this->redirect(Yii::$app->request->referrer);
+            return $this->goHome();
+            Yii::$app->session->setFlash('success', 'Вход успешно осуществлен');
+            // return $this->redirect(Yii::$app->request->referrer);
         }
     }
     
@@ -121,7 +124,8 @@ class CalendarController extends Controller
         if ($data = Yii::$app->request->post()) {
             if ($event = Calendar::updateEvent($data)) {
                 Yii::$app->session->setFlash('success', "Успех,  <a href='$event[1]'>Ссылка на событие в Google calendar</a>");
-                return $this->redirect(['calendar/update-event', 'calendarId' =>  $data['calendarId'], 'eventId' => $event[0]]);
+                //return $this->redirect(['calendar/update-event', 'calendarId' =>  $data['calendarId'], 'eventId' => $event[0]]);
+                return $this->redirect(['calendar/calendar-events', 'id' =>  $data['calendarId']]);
             }
         };
 
@@ -203,4 +207,35 @@ class CalendarController extends Controller
         }
         return $str;
     }
+    
+    public function actionCalendarEvents($id)
+    {
+        $client = User::getClient();
+        
+        if (!$client) {
+            echo '!$client';
+            exit;
+        }
+
+        $calendar = Calendar::getCalendar($id);
+      
+//        $monthEnd = date('m', time());
+//        $yearEnd = date('Y', time());
+
+        $timeMin = '1000-01-01T00:00:00+00:00';
+        $timeMax = '3000-01-01T00:00:00+00:00';
+        $service = new Google_Service_Calendar($client);
+        $dataEvents = Calendar::getListEvents($service, $calendar, $timeMin, $timeMax, $maxResults = 10000);
+        
+        // сортировка данных по убыванию
+        usort($dataEvents, function ($a, $b) {
+            return $a['start'] < $b['start'];
+        });
+        
+        return $this->render('calendar-events', [
+            'calendarDescription' => json_decode($calendar->description),
+            'dataEvents' => $dataEvents,
+        ]);
+    }
+    
 }

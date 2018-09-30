@@ -146,7 +146,7 @@ jQuery(document).ready(function(){
         var noData = true;
         $('div.form-group.description').each(function() {
             noData = false;
-            data[$(this).children('.description-filed').text()] = $(this).children('.description-value').val();
+            data[$(this).children('.description-filed').text()] = $(this).children('.description-value').val().replace( /"/g, "'" );
         });
         // если календарь не содержит разметку полей (занчения data в description)
         if (noData) return;

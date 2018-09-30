@@ -31,7 +31,8 @@ $this->title = 'Calendar';
                     <td><?= ++$k ?></td>
                     <td>
                         <?php
-                        echo $calendar->summary;
+//                        echo $calendar->summary;
+                        echo Html::a($calendar->summary, ['calendar/calendar-events', 'id' => $calendar->id], ['class' => '']);
                         echo '</td><td>';
                         echo Html::a("", ['calendar/update-calendar', 'id' => $calendar->id], ['class' => 'profile-link glyphicon glyphicon-cog']);
                         echo '&nbsp;';
