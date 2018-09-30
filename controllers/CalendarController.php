@@ -192,7 +192,9 @@ class CalendarController extends Controller
     public function actionDeleteEvent($calendarId, $eventId)
     {
         echo Calendar::deleteEvent($calendarId, $eventId);
-        return $this->redirect(Yii::$app->request->referrer);
+        Yii::$app->session->setFlash('success', "Запись удалена");
+        return $this->redirect(['calendar/calendar-events', 'id' =>  $calendarId]);
+        // return $this->redirect(Yii::$app->request->referrer);
     }
 
     public static function arrayToStr($arr, $pad = '')
@@ -233,7 +235,7 @@ class CalendarController extends Controller
         });
         
         return $this->render('calendar-events', [
-            'calendarDescription' => json_decode($calendar->description),
+            'calendarDescription' => json_decode($calendar->description, true),
             'dataEvents' => $dataEvents,
         ]);
     }

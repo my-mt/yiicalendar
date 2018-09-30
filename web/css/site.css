@@ -133,3 +133,8 @@ a.desc:after {
     background-color: #337ab7;
     color: #fff;
 }
+
+.table-calendar-events .date-str {
+    white-space: nowrap;
+    margin: 0;
+}

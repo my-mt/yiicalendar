@@ -125,8 +125,8 @@ $this->title = 'Event form';
             <div class="form-group">
             <button form="w0" type="submit" class="btn btn-primary">Сохранить</button>
             </div>
-            <?php ActiveForm::end(); ?>     
-            
+            <?php ActiveForm::end(); ?>
+            <?= Html::a('Удалить', ['calendar/delete-event', 'calendarId' => $calendarId, 'eventId' => @$eventId], ['class' => 'btn btn-danger']); ?>
         </div>
     </div>
 </div>
