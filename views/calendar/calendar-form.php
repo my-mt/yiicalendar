@@ -85,7 +85,7 @@ $fieldType = [
 
 <script>
     // Добавлнеие обработчика изменения уже имеющихся select
-    $(".add-field-sec select").change(function() {
+    $(".add-field-sec select, input.add-field").change(function() {
         makeDescriptionStr();
     });
         

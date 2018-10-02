@@ -150,8 +150,18 @@ jQuery(document).ready(function(){
         });
         // если календарь не содержит разметку полей (занчения data в description)
         if (noData) return;
+      
+        // Данные, которые уже есть в поле description
+        try {
+            var curDataDescription = JSON.parse($('textarea[name="description"]').val());
+        } catch {
+            curDataDescription = {};
+        }     
+        // Теперь есть два объекта: Текущий curDataDescription и новый data и их надо объеденить
+        var result = $.extend(true, curDataDescription,data)
+        // Теперь поля, которые были не затираются
         
-        $('textarea[name="description"]').val(JSON.stringify(data));
+        $('textarea[name="description"]').val(JSON.stringify(result));
     }
     
     

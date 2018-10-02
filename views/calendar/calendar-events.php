@@ -64,7 +64,7 @@ $this->title = 'Calendar-events';
                                 }
                                 echo "<td></td>";
                             } else {  // если нет, товыводим пустые столбцы
-                                foreach($dataDescription['data'] as $v) { //calendarDescription->data
+                                foreach($calendarDescription['data'] as $v) { //calendarDescription->data
                                     echo "<td>---</td>";
                                 }
                                 echo "<td>" . $event['description'] . "</td>";
