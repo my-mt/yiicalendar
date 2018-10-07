@@ -130,6 +130,7 @@ class CalendarController extends Controller
         };
 
         $event = Calendar::getEvent($calendarId, $eventId);
+
         
         $calendar = Calendar::getCalendar($calendarId);
         $calendarDescription = @json_decode($calendar->description);
@@ -141,6 +142,11 @@ class CalendarController extends Controller
         
         $timeStart = substr($event->start->dateTime, 11, 5);
         $timeEnd = substr($event->end->dateTime, 11, 5);
+        
+                
+//        echo '<pre>';
+//        print_r($event->attachments);
+//        exit;
      
         return $this->render('event-form', [
             'calendarId' => $calendarId,
@@ -218,14 +224,30 @@ class CalendarController extends Controller
             echo '!$client';
             exit;
         }
+        
+        $month = Yii::$app->request->get('month');
+        $year = Yii::$app->request->get('year');
+        
+        if(!$month || !$year) {
+            $month = date('m', time());
+            $year = date('Y', time());
+        }
+        
+        if ($month == '12') {
+            $monthEnd = 1;
+            $yearEnd = $yearEnd + 1;
+        } else {
+            $monthEnd = $month + 1;
+            $yearEnd = $year;
+        }
+        if ($monthEnd < 10)
+            $monthEnd = '0' . $monthEnd;
+
+        $timeMin = $year.'-'.$month.'-01T00:00:00+00:00';
+        $timeMax = $yearEnd.'-'.$monthEnd.'-01T00:00:00+00:00';
 
         $calendar = Calendar::getCalendar($id);
       
-//        $monthEnd = date('m', time());
-//        $yearEnd = date('Y', time());
-
-        $timeMin = '1000-01-01T00:00:00+00:00';
-        $timeMax = '3000-01-01T00:00:00+00:00';
         $service = new Google_Service_Calendar($client);
         $dataEvents = Calendar::getListEvents($service, $calendar, $timeMin, $timeMax, $maxResults = 10000);
         
@@ -237,6 +259,9 @@ class CalendarController extends Controller
         return $this->render('calendar-events', [
             'calendarDescription' => json_decode($calendar->description, true),
             'dataEvents' => $dataEvents,
+            'year' => $year,
+            'month' => $month,
+            'id' => $id,
         ]);
     }
     

@@ -16,7 +16,7 @@ $this->title = 'Calendar';
         <div class="col-md-9">
         <?php
 
-        echo CalendareventsWidget::widget(['year' => $year, 'month' => $month, 'data_events' => $listEvents]);
+        echo CalendareventsWidget::widget(['year' => $year, 'month' => $month, 'data_events' => $listEvents, 'url' => \Yii::$app->params['siteUrl'] . '/calendar?']);
         ?>
         </div>
         <div class="col-md-3">

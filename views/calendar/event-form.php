@@ -94,12 +94,13 @@ $this->title = 'Event form';
             </div>
             <div class="form-group">
                 <label class="control-label">Описание</label>
-                <textarea class="form-control" name="description"><?= @$event->description ?></textarea>
+                <textarea class="form-control" rows="4" name="description"><?= @$event->description ?></textarea>
             </div>
             <?php
             if(is_object($calendarFields)):
                 foreach($calendarFields as $field => $typeField) {
                 $type = 'text';
+                $textarea = 0;
                 $data = @json_decode($event->description);
                 switch ($typeField) {
                     case 'int':
@@ -108,13 +109,20 @@ $this->title = 'Event form';
                         break;
                     case 'time':
                         $type = "time";
+                    case 'str':
+                        $textarea = 7;
                         break;
-                } 
+                }
             ?>
             
             <div class="form-group description">
                 <label class="control-label description-filed"><?= $field ?></label>
-                <input class="form-control description-value" type="<?= $type ?>" name="<?= $field ?>" value="<?= @$data->$field ?>">
+                <?php if ($textarea) { ?>
+                    <textarea class="form-control description-value" rows="<?= $textarea ?>" name="<?= $field ?>"><?= @$data->$field ?></textarea>
+                <?php } else { ?>
+                    <input class="form-control description-value" type="<?= $type ?>" name="<?= $field ?>" value="<?= @$data->$field ?>">
+                <?php } ?>
+                
             </div>
             
             <?php } endif; ?>
@@ -139,6 +147,18 @@ jQuery(document).ready(function(){
         makeDescriptionStr();
     });
 
+    // Дублирование даты и времени из Начало в Окончание
+    // Переделать в связке дата и время
+    $('input[name="dateStart"]').change(function() {
+        if ($('input[name="dateEnd"]').val().replace(/-/g, '') < $(this).val().replace(/-/g, '')) {
+            $('input[name="dateEnd"]').val($(this).val());
+        }
+    });
+    $('input[name="timeStart"]').change(function() {
+        if ($('input[name="timeEnd"]').val().replace(':', '') < $(this).val().replace(':', '')) {
+            $('input[name="timeEnd"]').val($(this).val());
+        }
+    });
     
     // Функция формирует строку json для description
     function makeDescriptionStr() {

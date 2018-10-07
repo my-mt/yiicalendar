@@ -28,9 +28,9 @@ switch ($month) {
 
 ?>
 <div class="contorl-head-calendar-events">
-    <a href="<?= $siteUrl ?>/calendar?year=<?= $year_prev ?>&month=<?= $month_prev ?>" class="glyphicon glyphicon-menu-left"></a>
+    <a href="<?= $url ?>year=<?= $year_prev ?>&month=<?= $month_prev ?>" class="glyphicon glyphicon-menu-left"></a>
     <strong class="year-month"><?= $month_arr[$month - 1] ?> <?= $year?></strong>
-    <a href="<?= $siteUrl ?>/calendar?year=<?= $year_next ?>&month=<?= $month_next ?>" class="glyphicon glyphicon-menu-right"></a>
+    <a href="<?= $url ?>year=<?= $year_next ?>&month=<?= $month_next ?>" class="glyphicon glyphicon-menu-right"></a>
 </div>
 <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="smallModal" aria-hidden="true">
     <div class="modal-dialog modal-lg">

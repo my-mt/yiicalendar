@@ -8,6 +8,7 @@ class CalendareventsWidget extends Widget {
     public $year;
     public $month;
     public $data_events;
+    public $url;
 
     public function run(){
 
@@ -16,7 +17,8 @@ class CalendareventsWidget extends Widget {
             [
             'year' => $this->year,
             'month' => $this->month,
-            'data_events' => $this->data_events
+            'data_events' => $this->data_events,
+            'url' => $this->url
             ]
             );
     }
