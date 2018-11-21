@@ -14,8 +14,9 @@ $fieldType = [
     'time' => 'время',
     'bool' => 'да или нет',
     'str'=> 'текст',
-    'html' => 'html'
-        ]
+    'html' => 'html',
+    'url_image' => 'ссылки на изображения'
+]
 ?>
 <div class='row hidden'>
     <div id="tpl-select-type">

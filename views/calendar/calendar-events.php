@@ -20,6 +20,26 @@ $this->title = 'Calendar-events';
         echo CalendareventsWidget::widget(['year' => $year, 'month' => $month, 'data_events' => $dataEvents, 'url' => \Yii::$app->params['siteUrl'] . '/calendar/calendar-events?id=' . $id . '&']);
         ?> 
         </div>
+        <!-- <pre> -->
+            <?php
+            // $calendarDescription - это данные свойстава календаря
+            // $dataEvents - это события
+            // print_r($calendarDescription);
+            // print_r($dataEvents);
+
+            // Получает строку с url изображений и отдает ссылки с картинками.
+            // Строка разбивается в массив по символам перевода строки, допускается множественный перевод строк, лишняя итерация будет пропущена.
+            function extractImg($strImg) {
+                $imgArr = explode("\n", $strImg);
+                $result = '';
+                foreach($imgArr as $urlImg){
+                    if (!$urlImg) continue;
+                    $result .= '<a target="_blank" href="' . $urlImg . '" ><img class="event-img" src="' . $urlImg . '"></a>';
+                }
+                return $result;
+            }
+            ?>
+        <!-- </pre> -->
         <div class="col-md-12">
             <table class="table table-striped table-responsive table-calendar-events">
                 <thead class="thead-inverse">
@@ -65,8 +85,17 @@ $this->title = 'Calendar-events';
                                         $sum[$k] += (double)@$dataDescription[$k];
                                     } else {
                                         $sum[$k] = (double)@$dataDescription[$k];
-                                    }                                 
-                                    echo "<td>" . @$dataDescription[$k] . "</td>";
+                                    }
+                                    switch ($v) {
+                                        case 'url_image':
+                                            echo "<td>";
+                                            echo extractImg(@$dataDescription[$k]);
+                                            echo "</td>";
+                                            break;
+                                        default:
+                                            echo "<td>" . @$dataDescription[$k] . "</td>";
+                                            break;
+                                    }
                                 }
                                 echo "<td></td>";
                             } else {  // если нет, товыводим пустые столбцы

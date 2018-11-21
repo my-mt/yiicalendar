@@ -110,6 +110,7 @@ $this->title = 'Event form';
                     case 'time':
                         $type = "time";
                     case 'str':
+                    case 'url_image':
                         $textarea = 7;
                         break;
                 }

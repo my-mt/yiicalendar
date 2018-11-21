@@ -138,3 +138,8 @@ a.desc:after {
     white-space: nowrap;
     margin: 0;
 }
+
+.event-img {
+    height: 100px;
+    margin: 5px;
+}

@@ -111,16 +111,35 @@ function showEvent(arrIdrec) {
         table += '<tr>';
         table += '<td>' + (i + 1) + '</td>';
         table += '<td>' + rec["summary"] + '</td>';
-        table += '<td>' + rec["start"].substring(11,16) + '</td>';
-        table += '<td>' + rec["end"].substring(11,16) + '</td>';
+        table += '<td>' + rec["start"].substring(0,10) + ' ' + rec["start"].substring(11,16) + '</td>';
+        table += '<td>' + rec["start"].substring(0,10) + ' ' + rec["start"].substring(11,16) + '</td>';
+
+        // Получает строку с url изображений и отдает ссылки с картинками.
+        // Строка разбивается в массив по символам перевода строки, допускается множественный перевод строк, лишняя итерация будет пропущена.
+        function extractImg(strImg) {
+            var imgArr = strImg.split('\n');
+            console.log(imgArr);
+            var result = '';
+            for (urlImg in imgArr){
+                if (!imgArr[urlImg]) continue;
+                result += '<a target="_blank" href="' + imgArr[urlImg] + '" ><img class="event-img" src="' + imgArr[urlImg] + '"></a>';
+            }
+            return result;
+        }
 
         try {
             var data = JSON.parse(rec["description"]);
-            console.log(rec["description"]);
             if(data) {
                 var str = '';
                 for(key in calendarDescription.data) {
-                    str += '<td>' + data[key] + '</td>';
+                    switch(calendarDescription.data[key]) {
+                        case 'url_image':
+                            str += '<td>' + extractImg(data[key]) + '</td>';
+                            break
+                        default:
+                            str += '<td>' + data[key] + '</td>';
+                            break
+                    }
                 }
                 if (str) {
                     table += str;
@@ -147,7 +166,6 @@ function showEvent(arrIdrec) {
 }
 
 var dataEvents = <?= json_encode($data_events) ?>;
-console.log(dataEvents);
 
 // функция строит календарь в блоке с id="calendar-tadev"
 $(function() {
