@@ -93,9 +93,10 @@ class CalendarController extends Controller
             Yii::$app->session->setFlash('warning', 'Доступ к календарю предоставлен<br> ' . 'RefreshToken' . $client->getRefreshToken());
             return $this->goHome();
         } else {
-            return $this->goHome();
+            //return $this->goHome();
             Yii::$app->session->setFlash('success', 'Вход успешно осуществлен');
-            // return $this->redirect(Yii::$app->request->referrer);
+            return $this->redirect(['index']);
+            //return $this->redirect(Yii::$app->request->referrer);
         }
     }
     

@@ -149,15 +149,23 @@ jQuery(document).ready(function(){
 
     // Дублирование даты и времени из Начало в Окончание
     // Переделать в связке дата и время
+    //$('input[name="dateStart"]').change(function() {
+    //    if ($('input[name="dateEnd"]').val().replace(/-/g, '') < $(this).val().replace(/-/g, '')) {
+    //        $('input[name="dateEnd"]').val($(this).val());
+    //    }
+    //});
+    //$('input[name="timeStart"]').change(function() {
+    //    if ($('input[name="timeEnd"]').val().replace(':', '') < $(this).val().replace(':', '')) {
+    //        $('input[name="timeEnd"]').val($(this).val());
+    //    }
+    //});
+    
+    // Просто дублируем дату (время) начала в дату (время) окончания при изменении даты (времени) начала
     $('input[name="dateStart"]').change(function() {
-        if ($('input[name="dateEnd"]').val().replace(/-/g, '') < $(this).val().replace(/-/g, '')) {
-            $('input[name="dateEnd"]').val($(this).val());
-        }
+        $('input[name="dateEnd"]').val($(this).val());
     });
     $('input[name="timeStart"]').change(function() {
-        if ($('input[name="timeEnd"]').val().replace(':', '') < $(this).val().replace(':', '')) {
-            $('input[name="timeEnd"]').val($(this).val());
-        }
+        $('input[name="timeEnd"]').val($(this).val());
     });
     
     // Функция формирует строку json для description
