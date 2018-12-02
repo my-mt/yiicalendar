@@ -15,9 +15,17 @@ $this->title = 'Calendar-events';
     <h3><?= @$dataEvents[0]['calendar_summary'] ?></h3>
 
     <div class="row">
+        <div class="col-md-6" style="text-align: left">
+            <?= Html::a('Показать все события (10000)', ['calendar/calendar-events', 'id' => $id, 'count' => 10000], ['class' => '']) ?>
+        </div>
+        <div class="col-md-6" style="text-align: right">
+            <?= Html::a('Показать текущий месяц', ['calendar/calendar-events', 'id' => $id], ['class' => '']) ?>
+        </div>
         <div class="col-md-12">
         <?php
-        echo CalendareventsWidget::widget(['year' => $year, 'month' => $month, 'data_events' => $dataEvents, 'url' => \Yii::$app->params['siteUrl'] . '/calendar/calendar-events?id=' . $id . '&']);
+        if ($calendarView) {
+            echo CalendareventsWidget::widget(['year' => $year, 'month' => $month, 'data_events' => $dataEvents, 'url' => \Yii::$app->params['siteUrl'] . '/calendar/calendar-events?id=' . $id . '&']);
+        }
         ?> 
         </div>
         <!-- <pre> -->

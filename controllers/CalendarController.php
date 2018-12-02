@@ -36,7 +36,7 @@ class CalendarController extends Controller
         
         if ($month == '12') {
             $monthEnd = 1;
-            $yearEnd = $yearEnd + 1;
+            $yearEnd = $year + 1;
         } else {
             $monthEnd = $month + 1;
             $yearEnd = $year;
@@ -44,15 +44,15 @@ class CalendarController extends Controller
         if ($monthEnd < 10)
             $monthEnd = '0' . $monthEnd;
 
-        $timeMin = $year.'-'.$month.'-01T00:00:00+00:00';
-        $timeMax = $yearEnd.'-'.$monthEnd.'-01T00:00:00+00:00';
+        $timeMin = $year.'-'.$month.'-01T00:00:00+03:00';
+        $timeMax = $yearEnd.'-'.$monthEnd.'-01T00:00:00+03:00';
         
 //        $request = Yii::$app->request;
 //        $calendarId = $request->get('id');
 
         $listEvents = [];
         foreach($calendarList as $calendar){
-            $eventData = Calendar::getListEvents($service, $calendar, $timeMin, $timeMax, 100);
+            $eventData = Calendar::getListEvents($service, $calendar, $timeMin, $timeMax, 1000);
             $listEvents = array_merge($listEvents, $eventData);
         }
         
@@ -225,32 +225,43 @@ class CalendarController extends Controller
             echo '!$client';
             exit;
         }
+
         
         $month = Yii::$app->request->get('month');
         $year = Yii::$app->request->get('year');
-        
-        if(!$month || !$year) {
-            $month = date('m', time());
-            $year = date('Y', time());
-        }
-        
-        if ($month == '12') {
-            $monthEnd = 1;
-            $yearEnd = $yearEnd + 1;
-        } else {
-            $monthEnd = $month + 1;
-            $yearEnd = $year;
-        }
-        if ($monthEnd < 10)
-            $monthEnd = '0' . $monthEnd;
+        $count = Yii::$app->request->get('count');
 
-        $timeMin = $year.'-'.$month.'-01T00:00:00+00:00';
-        $timeMax = $yearEnd.'-'.$monthEnd.'-01T00:00:00+00:00';
+        if ($count) {
+            $timeMin = '1900-01-01T00:00:00+03:00';
+            $timeMax = '2100-01-01T00:00:00+03:00';
+            $calendarView = false;
+        } else {
+            $count = 1000;
+            $calendarView = true;
+
+            if(!$month || !$year) {
+                $month = date('m', time());
+                $year = date('Y', time());
+            }
+            
+            if ($month == '12') {
+                $monthEnd = 1;
+                $yearEnd = $year + 1;
+            } else {
+                $monthEnd = $month + 1;
+                $yearEnd = $year;
+            }
+            if ($monthEnd < 10)
+                $monthEnd = '0' . $monthEnd;
+
+            $timeMin = $year.'-'.$month.'-01T00:00:00+03:00';
+            $timeMax = $yearEnd.'-'.$monthEnd.'-01T00:00:00+03:00';
+        }
 
         $calendar = Calendar::getCalendar($id);
       
         $service = new Google_Service_Calendar($client);
-        $dataEvents = Calendar::getListEvents($service, $calendar, $timeMin, $timeMax, $maxResults = 10000);
+        $dataEvents = Calendar::getListEvents($service, $calendar, $timeMin, $timeMax, $count);
         
         // сортировка данных по убыванию
         usort($dataEvents, function ($a, $b) {
@@ -263,6 +274,7 @@ class CalendarController extends Controller
             'year' => $year,
             'month' => $month,
             'id' => $id,
+            'calendarView' => $calendarView, 
         ]);
     }
     
