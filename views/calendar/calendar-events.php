@@ -14,15 +14,17 @@ $this->title = 'Calendar-events';
 <div class="body-content">
     <h3><?= @$dataEvents[0]['calendar_summary'] ?></h3>
 
-    <h4><?= Html::a('Добавить событие', ['calendar/insert-event', 'calendarId' => $id], ['class' => '']) ?></h4>
+    <h4><?= Html::a('Добавить событие <span class="profile-link glyphicon glyphicon-plus-sign"></span>', ['calendar/insert-event', 'calendarId' => $id], ['class' => '']) ?></h4>
 
     <div class="row">
-        <div class="col-md-6" style="text-align: left">
-            <?= Html::a('Показать все события (10000)', ['calendar/calendar-events', 'id' => $id, 'count' => 10000], ['class' => '']) ?>
+        <div class="col-xs-12">
+            <?php if ($calendarView) {
+                echo Html::a('Показать все события (10000)', ['calendar/calendar-events', 'id' => $id, 'count' => 10000], ['class' => '']);
+            } else {
+                echo Html::a('Показать текущий месяц', ['calendar/calendar-events', 'id' => $id], ['class' => '']);
+            } ?>
         </div>
-        <div class="col-md-6" style="text-align: right">
-            <?= Html::a('Показать текущий месяц', ['calendar/calendar-events', 'id' => $id], ['class' => '']) ?>
-        </div>
+
         <div class="col-md-12">
         <?php
         if ($calendarView) {
@@ -55,6 +57,7 @@ $this->title = 'Calendar-events';
                 <thead class="thead-inverse">
                     <tr>
                         <th>№</th>
+                        <th>Ред.</th>
                         <th>Начало</th>
                         <th>Конец</th>
                         <?php if (is_array($calendarDescription)) { ?>
@@ -77,6 +80,7 @@ $this->title = 'Calendar-events';
                     foreach($dataEvents as $event) { $i--; ?>
                     <tr>
                         <td><?= Html::a($i, ['calendar/update-event', 'calendarId' => $event['calendar_id'], 'eventId' => $event['id']], ['class' => '']); ?></td>
+                        <td><?= Html::a('', ['calendar/update-event', 'calendarId' => $event['calendar_id'], 'eventId' => $event['id']], ['class' => 'profile-link glyphicon glyphicon-cog']); ?></td>
                         <td><p class="date-str"><?= substr($event['start'], 0, 10) ?></p><?= substr($event['start'], 11, 5) ?> </td>
                         <td><p class="date-str"><?= substr($event['end'], 0, 10) ?></p><?= substr($event['end'], 11, 5) ?> </td>
                         <td><?= $event['summary']?> </td>
@@ -121,6 +125,7 @@ $this->title = 'Calendar-events';
                     </tr>
                     <?php } ?>
                     <tr>
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
