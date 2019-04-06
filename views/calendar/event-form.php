@@ -128,13 +128,16 @@ $this->title = 'Event form';
             
             <?php }
                 if ($showDescription && !@$calendarSettings->descriptionHide) {
+                    $descriptionStyle = "style='display: block'";
+                } else {
+                    $descriptionStyle = "style='display: none'";
+                }
             ?>
-                <div class="form-group">
+                <div class="form-group" <?= $descriptionStyle ?>>
                     <label class="control-label">Описание</label>
                     <textarea class="form-control" rows="4" name="description"><?= @$event->description ?></textarea>
                 </div>
-            <?php } 
-            endif; ?>
+            <?php endif; ?>
 
             <div class="form-group">
             <button form="w0" type="submit" class="btn btn-primary">Сохранить</button>
