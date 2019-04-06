@@ -2,6 +2,7 @@
 
 return [
     'adminEmail' => 'admin@example.com',
-    'siteUrl' => 'https://localhost.yiicalendar.ru/web',
+    'siteUrl' => 'https://calendar.devtes.ru/web',
 ];
+
 //echo Yii::$app->params['adminEmail'];

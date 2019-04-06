@@ -14,6 +14,8 @@ $this->title = 'Calendar-events';
 <div class="body-content">
     <h3><?= @$dataEvents[0]['calendar_summary'] ?></h3>
 
+    <h4><?= Html::a('Добавить событие', ['calendar/insert-event', 'calendarId' => $id], ['class' => '']) ?></h4>
+
     <div class="row">
         <div class="col-md-6" style="text-align: left">
             <?= Html::a('Показать все события (10000)', ['calendar/calendar-events', 'id' => $id, 'count' => 10000], ['class' => '']) ?>

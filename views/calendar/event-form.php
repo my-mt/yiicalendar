@@ -14,7 +14,7 @@ $this->title = 'Event form';
 ?>
 
 <div class="content">
-    <h3>Событие календаря: "<?= $calendarSummary ?>"</h3>
+    <h3>Событие календаря: <?= Html::a($calendarSummary, ['calendar/calendar-events', 'id' => $calendarId], ['class' => '']) ?></h3>
     <div class="row">
         <div class="col-md-6">
             <?php $form = ActiveForm::begin(); ?>
@@ -56,6 +56,7 @@ $this->title = 'Event form';
                         </div>
                     </div>
                 </div>
+                <?php if (!@$calendarSettings->dateOne) { ?>
                 <div class="col-xs-6">
                     <div class="form-group">
                         <label class="control-label">Окончание</label>
@@ -87,18 +88,17 @@ $this->title = 'Event form';
                         </div>
                     </div>
                 </div>
+                <?php } ?>
             </div>
             <div class="form-group">
                 <label class="control-label">Весь день</label>
                 <input type="checkbox" name="all-day" class="form-check-input" id="all-day" value="1" <?= ($timeStart) ? '' : 'checked' ?> >
             </div>
-            <div class="form-group">
-                <label class="control-label">Описание</label>
-                <textarea class="form-control" rows="4" name="description"><?= @$event->description ?></textarea>
-            </div>
             <?php
             if(is_object($calendarFields)):
+                $showDescription = true;
                 foreach($calendarFields as $field => $typeField) {
+                $showDescription = false;
                 $type = 'text';
                 $textarea = 0;
                 $data = @json_decode($event->description);
@@ -116,26 +116,32 @@ $this->title = 'Event form';
                 }
             ?>
             
-            <div class="form-group description">
-                <label class="control-label description-filed"><?= $field ?></label>
-                <?php if ($textarea) { ?>
-                    <textarea class="form-control description-value" rows="<?= $textarea ?>" name="<?= $field ?>"><?= @$data->$field ?></textarea>
-                <?php } else { ?>
-                    <input class="form-control description-value" type="<?= $type ?>" name="<?= $field ?>" value="<?= @$data->$field ?>">
-                <?php } ?>
-                
-            </div>
-            
-            <?php } endif; ?>
-            <div class="row">
-                <div class="col-xs-6">
+                <div class="form-group description">
+                    <label class="control-label description-filed"><?= $field ?></label>
+                    <?php if ($textarea) { ?>
+                        <textarea class="form-control description-value" rows="<?= $textarea ?>" name="<?= $field ?>"><?= @$data->$field ?></textarea>
+                    <?php } else { ?>
+                        <input class="form-control description-value" type="<?= $type ?>" name="<?= $field ?>" value="<?= @$data->$field ?>" step="any">
+                    <?php } ?>
+                    
                 </div>
-            </div>
+            
+            <?php }
+                if ($showDescription && !@$calendarSettings->descriptionHide) {
+            ?>
+                <div class="form-group">
+                    <label class="control-label">Описание</label>
+                    <textarea class="form-control" rows="4" name="description"><?= @$event->description ?></textarea>
+                </div>
+            <?php } 
+            endif; ?>
+
             <div class="form-group">
             <button form="w0" type="submit" class="btn btn-primary">Сохранить</button>
-            </div>
+            
             <?php ActiveForm::end(); ?>
             <?= Html::a('Удалить', ['calendar/delete-event', 'calendarId' => $calendarId, 'eventId' => @$eventId], ['class' => 'btn btn-danger']); ?>
+            </div>
         </div>
     </div>
 </div>

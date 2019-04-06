@@ -136,6 +136,7 @@ class CalendarController extends Controller
         $calendar = Calendar::getCalendar($calendarId);
         $calendarDescription = @json_decode($calendar->description);
         $calendarSetSummary = @$calendarDescription->settings->summary;
+        $calendarSettings = @$calendarDescription->settings;
         $calendarFields = @$calendarDescription->data;
         
         $dateStart = ($event->start->date) ? $event->start->date : substr($event->start->dateTime, 0, 10);
@@ -160,6 +161,7 @@ class CalendarController extends Controller
             'dateEnd' => $dateEnd,
             'timeStart' => $timeStart,
             'timeEnd' => $timeEnd,
+            'calendarSettings' => $calendarSettings,
         ]);
     }
     
@@ -168,13 +170,15 @@ class CalendarController extends Controller
          if ($data = Yii::$app->request->post()) {
             if ($event = Calendar::insertEvent($data)) {
                 Yii::$app->session->setFlash('success', "Успех,  <a href='$event[1]'>Ссылка на событие в Google calendar</a>");
-                return $this->redirect(['calendar/update-event', 'calendarId' =>  $data['calendarId'], 'eventId' => $event[0]]);
+                //return $this->redirect(['calendar/update-event', 'calendarId' =>  $data['calendarId'], 'eventId' => $event[0]]);
+                return $this->redirect(['calendar/calendar-events', 'id' =>  $data['calendarId']]);
             }
         };
 
         $calendar = Calendar::getCalendar($calendarId);
         $calendarDescription = @json_decode($calendar->description);
         $calendarSetSummary = @$calendarDescription->settings->summary;
+        $calendarSettings = @$calendarDescription->settings;
         $calendarFields = @$calendarDescription->data;
         
         $dateStart = date('Y-m-d', time());
@@ -193,6 +197,7 @@ class CalendarController extends Controller
             'dateEnd' => $dateEnd,
             'timeStart' => $timeStart,
             'timeEnd' => $timeEnd,
+            'calendarSettings' => $calendarSettings,
         ]);
     }
     
