@@ -56,8 +56,13 @@ $this->title = 'Event form';
                         </div>
                     </div>
                 </div>
-                <?php if (!@$calendarSettings->dateOne) { ?>
-                <div class="col-xs-6">
+                <?php if (@$calendarSettings->dateOne) {
+                    $timeEndStyle = $descriptionStyle = "style='display: none'";
+                } else {
+                    $timeEndStyle = $descriptionStyle = "style='display: block'";
+                }
+                ?>
+                <div class="col-xs-6" <?= $timeEndStyle  ?>>
                     <div class="form-group">
                         <label class="control-label">Окончание</label>
                         <?php
@@ -88,7 +93,6 @@ $this->title = 'Event form';
                         </div>
                     </div>
                 </div>
-                <?php } ?>
             </div>
             <div class="form-group">
                 <label class="control-label">Весь день</label>
