@@ -86,7 +86,7 @@ function showEvent(arrIdrec) {
     var table = '<div class="table-responsive"><table class="table table-striped table-hover table-sm">';
     table += '<thead class="thead-inverse"><tr><th>#</th><th>' + summary + '</th><th>начало</th><th>конец</th>';
     try {
-        if(calendarDescription.data) {
+        if(Object.keys(calendarDescription.data).length > 0) {
             for(key in calendarDescription.data) {
                 table += '<th>' + key + '</th>';
             }
@@ -98,7 +98,7 @@ function showEvent(arrIdrec) {
         table += '<th>описание</th>';
     }
     
-    table += '<th></th><th></th></tr></thead><tbody>';
+    table += '<th></th></tr></thead><tbody>';
     arrIdrec.forEach(function(item, i) {
         var rec = getProperty(item, 0, dataEvents);
         // Заголовок модального окна
@@ -112,7 +112,7 @@ function showEvent(arrIdrec) {
         table += '<td>' + (i + 1) + '</td>';
         table += '<td>' + rec["summary"] + '</td>';
         table += '<td>' + rec["start"].substring(0,10) + ' ' + rec["start"].substring(11,16) + '</td>';
-        table += '<td>' + rec["start"].substring(0,10) + ' ' + rec["start"].substring(11,16) + '</td>';
+        table += '<td>' + rec["end"].substring(0,10) + ' ' + rec["end"].substring(11,16) + '</td>';
 
         // Получает строку с url изображений и отдает ссылки с картинками.
         // Строка разбивается в массив по символам перевода строки, допускается множественный перевод строк, лишняя итерация будет пропущена.
