@@ -134,9 +134,18 @@ a.desc:after {
     color: #fff;
 }
 
+table.table-calendar-events {
+    margin-top: 20px;
+}
+
 .table-calendar-events .date-str {
     white-space: nowrap;
     margin: 0;
+}
+
+table.table.table-responsive.table-calendar-events td,
+table.table.table-striped.table-hover.table-sm td {
+    white-space: normal;
 }
 
 .event-img {

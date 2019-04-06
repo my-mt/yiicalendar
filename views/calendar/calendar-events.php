@@ -24,7 +24,8 @@ $this->title = 'Calendar-events';
                 echo Html::a('Показать текущий месяц', ['calendar/calendar-events', 'id' => $id], ['class' => '']);
             } ?>
         </div>
-
+    </div>
+    <div class="row">
         <div class="col-md-12">
         <?php
         if ($calendarView) {
@@ -53,6 +54,7 @@ $this->title = 'Calendar-events';
             ?>
         <!-- </pre> -->
         <div class="col-md-12">
+        <div class="table-responsive">
             <table class="table table-striped table-responsive table-calendar-events">
                 <thead class="thead-inverse">
                     <tr>
@@ -153,7 +155,7 @@ $this->title = 'Calendar-events';
 //            echo '</pre>'
             ?>
        
-           
+        </div>   
         </div>
     </div>
 
