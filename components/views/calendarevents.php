@@ -98,7 +98,7 @@ function showEvent(arrIdrec) {
         table += '<th>описание</th>';
     }
     
-    table += '<th></th></tr></thead><tbody>';
+    table += '<th></th><th></th></tr></thead><tbody>';
     arrIdrec.forEach(function(item, i) {
         var rec = getProperty(item, 0, dataEvents);
         // Заголовок модального окна
@@ -147,12 +147,14 @@ function showEvent(arrIdrec) {
                     table += '<td>' + rec["description"] + '</td>';
                 }
             } else {
-                table += '<td>' + rec["description"] + '</td>';   
+                table += '<td>';
+                table += (rec["description"] === null) ? '' : rec["description"];
+                table += '</td>';
             }
         } catch (e) {
             table += '<td>' + rec["description"] + '</td>';
         }
-        table += '<td><a class="glyphicon glyphicon-cog" href="<?= $siteUrl ?>/calendar/update-event?calendarId=' + rec["calendar_id"] + '&eventId=' + rec["id"] + '"></a>&nbsp;&nbsp;';
+        table += '<td><a class="glyphicon glyphicon-cog" href="<?= $siteUrl ?>/calendar/update-event?calendarId=' + rec["calendar_id"] + '&eventId=' + rec["id"] + '"></a>&nbsp;&nbsp;&nbsp;&nbsp;';
         table += '<a  onclick="return confirmDelete()" class="glyphicon glyphicon-remove-circle" href="<?= $siteUrl ?>/calendar/delete-event?calendarId=' + rec["calendar_id"] + '&eventId=' + rec["id"] + '"></a></td>';
         table += '</tr>';
     });
