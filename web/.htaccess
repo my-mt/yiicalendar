@@ -1,11 +1,14 @@
 Options +FollowSymLinks
-IndexIgnore */*
+ IndexIgnore */*
 
-RewriteEngine on
+RewriteCond %{REQUEST_URI} ^/(assets|css|js|images)
+ RewriteRule ^(.*)$ web/$1 [L]
+# if request dosn't start with web add it
+ RewriteCond %{REQUEST_URI} !^/(web)
+ RewriteRule (.*) /web/$1
+# if file or directory dosn't exists go to /web/index.php
+ RewriteCond %{REQUEST_FILENAME} !-f
+ RewriteCond %{REQUEST_FILENAME} !-d
+ RewriteRule . /web/index.php
 
-# if a directory or a file exists, use it directly
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
 
-# otherwise forward it to index.php
-RewriteRule . index.php
