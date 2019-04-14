@@ -5,6 +5,9 @@ namespace app\components;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+// https://repl.it/@__Antares__/Struktura-svoistva-kaliendaria
+// json структура {"data":{},"settings":{"summary":"Количество","summaryProp":"1","descriptionHide":"1"}}
+
 /* @var $this yii\web\View */
 
 $this->title = 'Calendar form';
@@ -50,10 +53,19 @@ $fieldType = [
         <div class="col-md-6">-->
             <?php
             $descriptionArr = json_decode($description);
+            $checkedCalc_1 = in_array(1, $descriptionArr->settings->summaryCalc) ? 'checked' : '';
             ?>
             <div class="form-group">
                 <label class="control-label">Название основного поля</label>
                 <input id="settings-summary" class="form-control" type="text" name="" value="<?= @$descriptionArr->settings->summary ?>">
+                <div class="checkbox">
+                    <label>
+                        <input data-calc="1" class="calc-summary" type="checkbox" <?= $checkedCalc_1 ?>> Суммировать данные основного поля
+                    </label>
+<!--                    <label>
+                        <input data-calc="2" class="calc-summary" type="checkbox"> Считать среднее значение основного поля
+                    </label>-->
+                </div>
             </div>
             <div class="form-group add-field-sec">
                 <label class="control-label" >Дополнительные поля</label>
@@ -109,6 +121,11 @@ $fieldType = [
         makeDescriptionStr();
     });
     
+    // обработчик чекбосов
+    $( '.calc-summary[type="checkbox"]' ).on( "click", function() {
+        makeDescriptionStr();
+    })  
+    
     // Функция формирует строку json для description
     function makeDescriptionStr() {
         var data = {}
@@ -117,9 +134,21 @@ $fieldType = [
                 data[$(this).children('input').val()] = $(this).children('select').val();
             }
         });
-        console.log(data);
-        var settings = {'summary': $('#settings-summary').val()}
+        
+        // проверка чекбоксов основного поля
+        var summaryCalc = [];
+        $('.calc-summary[type="checkbox"]').each(function() {
+            if($(this).is(":checked")) {
+                summaryCalc.push($(this).data('calc'));
+            }
+        });
+        
+        var settings = {
+            'summary': $('#settings-summary').val(),
+            'summaryCalc': summaryCalc,
+        }
         var description = {'data': data, 'settings': settings};
+        console.log(description);
         $('textarea[name="description"]').val(JSON.stringify(description));
     }
 </script>

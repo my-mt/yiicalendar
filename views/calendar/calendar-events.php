@@ -87,11 +87,16 @@ $this->title = 'Calendar-events';
                         <td><p class="date-str"><?= substr($event['end'], 0, 10) ?></p><?= substr($event['end'], 11, 5) ?> </td>
                         <td><?= $event['summary']?> </td>
                         <?php
-                        if (isset($sum['summary'])) {
-                            $sum['summary'] += (double)$event['summary'];
-                        } else {
-                            $sum['summary'] = (double)$event['summary'];
-                        } 
+                        // подсчет чисел из основного поля
+                        // summaryProp 0 - ничего не считает, 1 - суммирует, 2 - вычисляет среднее значение
+                        $sumSummary = in_array(1, @$calendarDescription['settings']['summaryCalc']);
+                        if ($sumSummary) {
+                            if (isset($sum['summary'])) {
+                               $sum['summary'] += (double)$event['summary'];
+                            } else {
+                                $sum['summary'] = (double)$event['summary'];
+                            }
+                        }
                         
                         if (is_array($calendarDescription)):
                             $dataDescription = json_decode($event['description'], true);
