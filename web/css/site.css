@@ -143,6 +143,15 @@ table.table-calendar-events {
     margin: 0;
 }
 
+.table-calendar-events .date-str.number-start {
+    font-size: 2.5rem;
+    margin: 0.5rem 1.5rem 0.5rem 0.5rem;
+}
+.table-calendar-events .date-str.number-end {
+    font-size: 2rem;
+    margin: 0.5rem 1.5rem 0.5rem 0.5rem;
+}
+
 table.table.table-responsive.table-calendar-events td,
 table.table.table-striped.table-hover.table-sm td {
     white-space: normal;
@@ -151,4 +160,8 @@ table.table.table-striped.table-hover.table-sm td {
 .event-img {
     height: 100px;
     margin: 5px;
+}
+
+.table-calendar-events .date-time {
+    display: flex;
 }

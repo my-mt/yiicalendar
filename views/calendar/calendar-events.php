@@ -58,10 +58,8 @@ $this->title = 'Calendar-events';
             <table class="table table-striped table-responsive table-calendar-events">
                 <thead class="thead-inverse">
                     <tr>
-                        <th>№</th>
-                        <th>Ред.</th>
                         <th>Начало</th>
-                        <th>Конец</th>
+                        <th>Оконч.</th>
                         <?php if (is_array($calendarDescription)) { ?>
                         <th><?= $calendarDescription['settings']['summary'] ?></th>
                         <?php
@@ -73,18 +71,47 @@ $this->title = 'Calendar-events';
                         <th>Заголовок</th>
                         <?php } ?>
                         <th></th>
+                        <th>Ред.</th>
+                        <th></th>  
                     </tr>
                 </thead>
                 <tbody>
                     <?php
+                    setlocale(LC_TIME, "ru_RU.utf8");
                     $sum = [];
                     $i = count($dataEvents) + 1;
                     foreach($dataEvents as $event) { $i--; ?>
                     <tr>
-                        <td><?= Html::a($i, ['calendar/update-event', 'calendarId' => $event['calendar_id'], 'eventId' => $event['id']], ['class' => '']); ?></td>
-                        <td><?= Html::a('', ['calendar/update-event', 'calendarId' => $event['calendar_id'], 'eventId' => $event['id']], ['class' => 'profile-link glyphicon glyphicon-cog']); ?></td>
-                        <td><p class="date-str"><?= substr($event['start'], 0, 10) ?></p><?= substr($event['start'], 11, 5) ?> </td>
-                        <td><p class="date-str"><?= substr($event['end'], 0, 10) ?></p><?= substr($event['end'], 11, 5) ?> </td>
+                        <td>
+                            <div  class="date-time"> 
+                                <div class="date-str number-start"><?= strftime("%d", strtotime($event['start'])) ?></div>
+                                <div class="date-str"><?= strftime("%b <b>%H:%M</b><br>%Y", strtotime($event['start'])) ?></div>
+                            </div>
+                        </td>
+                        <?php
+                        // скрываем дату и время если они повторяются
+                        if ($event['start'] == $event['end']) {
+                            $hideDateAll = 'hide';
+                        } else {
+                            $hideDateAll = '';
+                        }
+                        if (substr($event['start'], 0, 10) == substr($event['end'], 0, 10)) {
+                            $hideDate = 'hide';
+                        } else {
+                            $hideDate = '';
+                        }
+                        ?>
+                        <td>
+                            <div  class="date-time <?= $hideDateAll ?>"> 
+                                <div class="date-str number-end <?= $hideDate ?>"><?= strftime("%d", strtotime($event['end'])) ?></div>
+                                <div class="date-str">
+                                    <span class="<?= $hideDate ?>"><?= strftime("%b", strtotime($event['end'])) ?></span>
+                                    <b><?= strftime("%H:%M", strtotime($event['end'])) ?></b><br>
+                                    <span class="<?= $hideDate ?>"><?= strftime("%Y", strtotime($event['end'])) ?></span>
+                                </div>
+                            </div>
+                        </td>
+
                         <td><?= $event['summary']?> </td>
                         <?php
                         // подсчет чисел из основного поля
@@ -129,11 +156,11 @@ $this->title = 'Calendar-events';
                             echo "<td>" . $event['description'] . "</td>";                       
                         endIf;
                         ?>
+                        <td><?= Html::a('', ['calendar/update-event', 'calendarId' => $event['calendar_id'], 'eventId' => $event['id']], ['class' => 'profile-link glyphicon glyphicon-cog']); ?></td>
+                        <td><?= Html::a($i, ['calendar/update-event', 'calendarId' => $event['calendar_id'], 'eventId' => $event['id']], ['class' => '']); ?></td>
                     </tr>
                     <?php } ?>
                     <tr>
-                        <th></th>
-                        <th></th>
                         <th></th>
                         <th></th>
                         <?php if (is_array($calendarDescription)) { ?>
@@ -150,6 +177,8 @@ $this->title = 'Calendar-events';
                         <?php } else { ?>
                         <th></th>
                         <?php } ?>
+                        <th></th>
+                        <th></th>
                         <th></th>
                     </tr>
                 </tbody>
