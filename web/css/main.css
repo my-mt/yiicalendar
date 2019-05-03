@@ -422,15 +422,6 @@ table.info td {
     border-bottom: 1px solid #999;
 }
 
-
-table.info td.bline {
-
-
-}
-
-
-
-
 table.info th {
 
     background: #ccc; /* Цвет фона */
@@ -541,28 +532,34 @@ table.comparative-table-garage  td{
 }
 
 /*calendarevents calendar-tadev*/
-#calendar-tadev table {
+.calendar-tadev-section table {
   border-collapse: collapse;
   width: 100%;
 }
-#calendar-tadev thead th {
+.calendar-tadev-section thead th {
   border: 1px solid #a5a5a5;
   background-color: #ABCDEF;
   padding: 8px;
 }
-#calendar-tadev thead th.year-month {
+.calendar-tadev-section.single thead th {
+  padding: 0px 8px;
+}
+.calendar-tadev-section thead th.year-month {
   background-color: #fff;
   border: none;
 }
-#calendar-tadev tbody td {
+.calendar-tadev-section tbody td {
   height: 75px;
 }
-#calendar-tadev td {
+.calendar-tadev-section.single tbody td {
+  height: auto;
+}
+.calendar-tadev-section td {
   width: 14.285%;
   border: 1px solid #a5a5a5;
   vertical-align: top;
 }
-#calendar-tadev td .main {
+.calendar-tadev-section td .main {
   height: 100%;
   width: 100%;
   display: flex;
@@ -571,7 +568,7 @@ table.comparative-table-garage  td{
   align-content: flex-start;
   flex-wrap: wrap;
 }
-#calendar-tadev td .main .event-item {
+.calendar-tadev-section td .main .event-item {
   cursor: pointer;
   border-radius: 3px;
   background-color: #0ff;
@@ -584,8 +581,10 @@ table.comparative-table-garage  td{
   min-width: 20px;
   font-family: Lucida Console, monospace;
 }
-
-#calendar-tadev td div.date {
+.calendar-tadev-section.single td .main .event-item {
+  background-color: #ff7804;
+}
+.calendar-tadev-section td div.date {
   text-align: center;
   color: #000;
   padding: 2px;
@@ -593,7 +592,7 @@ table.comparative-table-garage  td{
   border-radius: 3px;
   margin: 0 5px 5px 0;
 }
-#calendar-tadev td.empty-block {
+.calendar-tadev-section td.empty-block {
   background-color: #eee;
 }
 .circle-events {
@@ -614,7 +613,7 @@ table.comparative-table-garage  td{
   padding: 10px;
 }
 
-#calendar-tadev td.today {
+.calendar-tadev-section td.today {
     border: 2px solid #f00;
 }
 
@@ -624,6 +623,9 @@ table.comparative-table-garage  td{
 .table-list-events .circle-events.all {
     background-color: #fff;
     border: 1px solid #333;
+}
+.modal-content-table {
+  margin: 5px 10px;
 }
 
 /* /calendarevents calendar-tadev*/

@@ -3,7 +3,7 @@ namespace app\components;
 use yii\base\Widget;
 
 
-class CalendareventsWidget extends Widget {
+class Calendarevents_singleWidget extends Widget {
 
     public $year;
     public $month;
@@ -12,7 +12,7 @@ class CalendareventsWidget extends Widget {
     public function run(){
 
         return $this->render(
-            'calendarevents',
+            'calendarevents_single',
             [
             'year' => $this->year,
             'month' => $this->month,

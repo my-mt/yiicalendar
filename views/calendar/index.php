@@ -3,6 +3,7 @@
 namespace app\components;
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\base\Widget;
 
 /* @var $this yii\web\View */
@@ -11,12 +12,31 @@ $this->title = 'Calendar';
 ?>
 
 <div class="body-content">
-
     <div class="row">
         <div class="col-md-9">
         <?php
+        $urlAction = Url::toRoute(['calendar/index']);
+        $eventFilterId = '';
+        // Для event-filter.php необходимы:
+        // $urlAction
+        // $yearStart
+        // $monthStart
+        // $yearEnd
+        // $monthEnd
+        // $eventFilterId
+        require 'event-filter.php';
 
-        echo CalendareventsWidget::widget(['year' => $year, 'month' => $month, 'data_events' => $listEvents, 'url' => \Yii::$app->params['siteUrl'] . '/calendar?']);
+        $count = 0;
+        while ($yearStart != $yearEnd || $monthStart != $monthEnd) {
+            $ount++;
+            if ($ount > 100) break;
+            echo CalendareventsWidget::widget(['year' => $yearStart, 'month' => $monthStart, 'data_events' => $listEvents]);
+            if ($monthStart > 11) {
+                $monthStart = 0;
+                $yearStart++;
+            }
+            $monthStart++;
+        }
         ?>
         </div>
         <div class="col-md-3">

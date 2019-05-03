@@ -46,7 +46,7 @@ switch ($month) {
             </div>
         </div>
     </div>
-    <div class="calendar-tadev-section" id="calendar-tadev-<?= $year . '-' . $month ?>"></div>
+    <div class="calendar-tadev-section single" id="calendar-tadev-<?= $year . '-' . $month ?>"></div>
 </div>
 
 <script>
@@ -153,7 +153,7 @@ function showEvent(arrIdrec) {
         try {
             var data = JSON.parse(rec["description"]);
             if(data) {
-                 var str = '';
+                var str = '';
                 for(key in calendarDescription.data) {
                     if (data[key] !== undefined) {
                         switch(calendarDescription.data[key]) {
@@ -273,9 +273,7 @@ $(function() {
             // Если sum NaN то не выводим вообще результат суммирования
             if (isNaN(sum)) sum = 0;
             if (sum === 0) {
-                sum = titleEvents.substring(0, 5);
-            } else { 
-                sum = titleEvents.substring(0, letterTitle) + " " + sum;
+                sum = '+';
             }
             eventsList += '<span title="' + titleEvents + '" onclick="showEvent(&#39;' + dataEventsDayObj[eventId].join(',') + '&#39;)" class="event-item" style="background-color: ' + color_events + '">' + sum + '</span>';
         }

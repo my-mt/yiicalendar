@@ -26,7 +26,7 @@ $this->title = 'Event form';
             </div>
             <div class="row">
                 <div class="col-xs-6">
-                    <div class="form-group">
+                    <div class="form-group start-section">
                         <label class="control-label">Начало</label>
                         <?php
                         echo DatePicker::widget([
@@ -63,7 +63,7 @@ $this->title = 'Event form';
                 }
                 ?>
                 <div class="col-xs-6" <?= $timeEndStyle  ?>>
-                    <div class="form-group">
+                    <div class="form-group end-section">
                         <label class="control-label">Окончание</label>
                         <?php
                         echo DatePicker::widget([
@@ -144,8 +144,8 @@ $this->title = 'Event form';
             <?php endif; ?>
 
             <div class="form-group">
-            <button form="w0" type="submit" class="btn btn-primary">Сохранить</button>
-            
+            <button form="w0" type="submit" class="btn btn-success">Сохранить</button>
+            <?= Html::a('Отменить', ['calendar/calendar-events', 'id' => $calendarId], ['class' => 'btn btn-primary']); ?>
             <?php ActiveForm::end(); ?>
             <?= Html::a('Удалить', ['calendar/delete-event', 'calendarId' => $calendarId, 'eventId' => @$eventId], ['class' => 'btn btn-danger']); ?>
             </div>
@@ -163,25 +163,16 @@ jQuery(document).ready(function(){
 
 //     Дублирование даты и времени из Начало в Окончание
 //     Переделать в связке дата и время
-    $('input[name="dateStart"]').change(function() {
-        if ($('input[name="dateEnd"]').val().replace(/-/g, '') < $(this).val().replace(/-/g, '')) {
-            $('input[name="dateEnd"]').val($(this).val());
-        }
-    });
-    $('input[name="timeStart"]').change(function() {
-        if ($('input[name="timeEnd"]').val().replace(':', '') < $(this).val().replace(':', '')) {
-            $('input[name="timeEnd"]').val($(this).val());
-        }
-    });
-    
-    // Просто дублируем дату (время) начала в дату (время) окончания при изменении даты (времени) начала
-//    $('input[name="dateStart"]').change(function() {
-//        $('input[name="dateEnd"]').val($(this).val());
-//    });
-//    $('input[name="timeStart"]').change(function() {
-//        $('input[name="timeEnd"]').val($(this).val());
-//        console.log('time =========================');
-//    });
+    // $('input[name="dateStart"]').change(function() {
+    //     if ($('input[name="dateEnd"]').val().replace(/-/g, '') < $(this).val().replace(/-/g, '')) {
+    //         $('input[name="dateEnd"]').val($(this).val());
+    //     }
+    // });
+    // $('input[name="timeStart"]').change(function() {
+    //     if ($('input[name="timeEnd"]').val().replace(':', '') < $(this).val().replace(':', '')) {
+    //         $('input[name="timeEnd"]').val($(this).val());
+    //     }
+    // });
     
     // Функция формирует строку json для description
     function makeDescriptionStr() {
@@ -231,5 +222,28 @@ jQuery(document).ready(function(){
     
     makeDescriptionStr();
 
+
+
 });
+
+window.onload=function() {
+    // Просто дублируем дату (время) начала в дату (время) окончания при изменении даты (времени) начала
+    $('input[name="dateStart"]').change(function() {
+        var inputEnd = $('input[name="dateEnd"]');
+        inputEnd.val($(this).val());
+        inputEnd.css({'color': '#fff'});
+    });
+    $('input[name="timeStart"]').change(function() {
+        var inputEnd = $('input[name="timeEnd"]');
+        inputEnd.val($(this).val());
+        inputEnd.css({'color': '#fff'});
+    });
+
+    $('input[name="dateEnd"]').click(function() {
+        $(this).css({'color': '#555'});
+    });
+    $('input[name="timeEnd"]').click(function() {
+        $(this).css({'color': '#555'});
+    });
+}
 </script>
