@@ -115,7 +115,11 @@ $this->title = 'Calendar-events';
                                     <td>
                                         <div  class="date-time"> 
                                             <div class="date-str number-start"><?= strftime("%d", strtotime($event['start'])) ?></div>
+                                            <?php if (strlen($event['start']) < 11) { ?>
+                                            <div class="date-str"><?= strftime("<b>весь день</b><br><small>%b %Y</small>", strtotime($event['start'])) ?></div>
+                                            <?php } else { ?>
                                             <div class="date-str"><?= strftime("<b>%H:%M</b><br><small>%b %Y</small>", strtotime($event['start'])) ?></div>
+                                            <?php } ?>
                                         </div>
                                     </td>
                                     <?php

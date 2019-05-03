@@ -103,9 +103,9 @@ function showEvent(arrIdrec) {
         if (i === 0) {
             color_events = rec["calendar_backgroundColor"];
             var optionsDateTitle = {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
             };
             date = new Date(Number(Date.parse(rec["start"])));
             title = '<span style="background-color: ' + color_events + '" class="circle-events"></span>';
@@ -122,7 +122,11 @@ function showEvent(arrIdrec) {
         };
         dateStart = new Date(Number(Date.parse(rec["start"])));
         if (rec["start"] === rec["end"]) {
-            table += '<td>' + dateStart.toLocaleString("ru", optionsDate) + '</td>';
+            if (rec["start"].length < 11) {
+                table += '<td>весь день</td>';
+            } else {
+                table += '<td>' + dateStart.toLocaleString("ru", optionsDate) + '</td>';
+            } 
         } else if (rec["start"].substring(0,10) === rec["end"].substring(0,10)) {
             dateEnd = new Date(Number(Date.parse(rec["end"])));
             table += '<td>' + dateStart.toLocaleString("ru", optionsDate) + " - " + dateEnd.toLocaleString("ru", optionsDate) + '</td>';
