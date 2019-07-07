@@ -13,7 +13,7 @@ class CalendarController extends Controller
 {
     
     public function actionIndex()
-    {;
+    {
         $client = User::getClient();
         
         if (!$client) {
@@ -83,6 +83,7 @@ class CalendarController extends Controller
         ]);
     }
 
+    // вызывается в соответствии с конфигурационным файлом goole
     public function actionLogin()
     {
         $clientSecrets = __DIR__ . '/../config/api/client_secrets.json';
@@ -114,8 +115,13 @@ class CalendarController extends Controller
         } else {
             //return $this->goHome();
             Yii::$app->session->setFlash('success', 'Вход успешно осуществлен');
-            return $this->redirect(['index']);
-            //return $this->redirect(Yii::$app->request->referrer);
+            // если переход по ссылке для добавления записи события, то перенаправляем на форму
+            if ($url = $_SESSION['before_url']) {
+                $_SESSION['before_url'] = false;
+                return $this->redirect($url);
+            } else {
+                return $this->redirect(['index']);
+            }
         }
     }
     
@@ -150,7 +156,6 @@ class CalendarController extends Controller
         };
 
         $event = Calendar::getEvent($calendarId, $eventId);
-
         
         $calendar = Calendar::getCalendar($calendarId);
         $calendarDescription = @json_decode($calendar->description);
@@ -163,11 +168,6 @@ class CalendarController extends Controller
         
         $timeStart = substr($event->start->dateTime, 11, 5);
         $timeEnd = substr($event->end->dateTime, 11, 5);
-        
-                
-//        echo '<pre>';
-//        print_r($event->attachments);
-//        exit;
      
         return $this->render('event-form', [
             'calendarId' => $calendarId,
@@ -186,7 +186,7 @@ class CalendarController extends Controller
     
     public function actionInsertEvent($calendarId)
     {
-         if ($data = Yii::$app->request->post()) {
+        if ($data = Yii::$app->request->post()) {
             if ($event = Calendar::insertEvent($data)) {
                 Yii::$app->session->setFlash('success', "Успех,  <a href='$event[1]'>Ссылка на событие в Google calendar</a>");
                 //return $this->redirect(['calendar/update-event', 'calendarId' =>  $data['calendarId'], 'eventId' => $event[0]]);
@@ -205,8 +205,14 @@ class CalendarController extends Controller
         
         $timeStart = date('H:i:s', time());
         $timeEnd = $timeStart;
+
+        if (@$calendarSettings->simpleMode[0] == 1) {
+            $mode = '-simple';
+        } else {
+            $mode = '';
+        }
      
-        return $this->render('event-form', [
+        return $this->render('event-form' . $mode, [
             'calendarId' => $calendarId,
             'calendarSetSummary' => $calendarSetSummary, // настройки календаря - название основного поля (summary события)
             'calendarSummary' => $calendar->summary,

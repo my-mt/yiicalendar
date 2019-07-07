@@ -54,6 +54,7 @@ $fieldType = [
             <?php
             $descriptionArr = json_decode($description);
             $checkedCalc_1 = in_array(1, $descriptionArr->settings->summaryCalc) ? 'checked' : '';
+            $checkedSimpleMode = in_array(1, $descriptionArr->settings->simpleMode) ? 'checked' : '';
             ?>
             <div class="form-group">
                 <label class="control-label">Название основного поля</label>
@@ -65,6 +66,11 @@ $fieldType = [
 <!--                    <label>
                         <input data-calc="2" class="calc-summary" type="checkbox"> Считать среднее значение основного поля
                     </label>-->
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input data-mode="1" class="simple-mode" type="checkbox" <?= $checkedSimpleMode ?>> Простой режим (при записи)
+                    </label>
                 </div>
             </div>
             <div class="form-group add-field-sec">
@@ -124,7 +130,11 @@ $fieldType = [
     // обработчик чекбосов
     $( '.calc-summary[type="checkbox"]' ).on( "click", function() {
         makeDescriptionStr();
-    })  
+    })
+
+    $( '.simple-mode[type="checkbox"]' ).on( "click", function() {
+        makeDescriptionStr();
+    }) 
     
     // Функция формирует строку json для description
     function makeDescriptionStr() {
@@ -142,10 +152,18 @@ $fieldType = [
                 summaryCalc.push($(this).data('calc'));
             }
         });
+
+        var simpleMode = [];
+        $('.simple-mode[type="checkbox"]').each(function() {
+            if($(this).is(":checked")) {
+                simpleMode.push($(this).data('mode'));
+            }
+        });
         
         var settings = {
             'summary': $('#settings-summary').val(),
             'summaryCalc': summaryCalc,
+            'simpleMode': simpleMode,
         }
         var description = {'data': data, 'settings': settings};
         console.log(description);

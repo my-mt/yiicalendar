@@ -165,7 +165,7 @@ function showEvent(arrIdrec) {
                                 str += '<td>' + extractImg(data[key]) + '</td>';
                                 break
                             default:
-                                str += '<td>' + data[key] + '</td>';
+                                str += '<td>' + data[key].replace(/\n/g, "<br>") + '</td>'; // адаптируем переносы строк
                                 break
                         }
                     } else {

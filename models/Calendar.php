@@ -102,10 +102,7 @@ class Calendar extends Model
     
     // Редактирование события
     public static function updateEvent($data)
-    {   
-//        echo '<pre>';
-//        print_r($data);
-//        exit;
+    {
         $service = new Google_Service_Calendar(User::getClient());
         $event = $service->events->get($data['calendarId'], $data['eventId']);
         $event->setSummary($data['summary']);

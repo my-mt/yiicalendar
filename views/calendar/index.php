@@ -9,35 +9,65 @@ use yii\base\Widget;
 /* @var $this yii\web\View */
 
 $this->title = 'Calendar';
+$monthStartNav = $monthStart;
+$yearStartNav = $yearStart;
+$month_arr = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
 ?>
 
 <div class="body-content">
     <div class="row">
         <div class="col-md-9">
-        <?php
-        $urlAction = Url::toRoute(['calendar/index']);
-        $eventFilterId = '';
-        // Для event-filter.php необходимы:
-        // $urlAction
-        // $yearStart
-        // $monthStart
-        // $yearEnd
-        // $monthEnd
-        // $eventFilterId
-        require 'event-filter.php';
+            <?php
+            $urlAction = Url::toRoute(['calendar/index']);
+            $eventFilterId = '';
+            // Для event-filter.php необходимы:
+            // $urlAction
+            // $yearStart
+            // $monthStart
+            // $yearEnd
+            // $monthEnd
+            // $eventFilterId
+            require 'event-filter.php';
 
-        $count = 0;
-        while ($yearStart != $yearEnd || $monthStart != $monthEnd) {
-            $ount++;
-            if ($ount > 100) break;
-            echo CalendareventsWidget::widget(['year' => $yearStart, 'month' => $monthStart, 'data_events' => $listEvents]);
-            if ($monthStart > 11) {
-                $monthStart = 0;
-                $yearStart++;
+            $count = 0;
+            $calendarHtml = '';
+            while ($yearStart != $yearEnd || $monthStart != $monthEnd) {
+                $count++;
+                if ($count > 100) break;
+                $calendarHtml .= CalendareventsWidget::widget(['year' => $yearStart, 'month' => $monthStart, 'data_events' => $listEvents]);
+                if ($monthStart > 11) {
+                    $monthStart = 0;
+                    $yearStart++;
+                }
+                $monthStart++;
             }
-            $monthStart++;
-        }
-        ?>
+
+            // Для случая, когда показывается один месяц
+            if ($count == 1) {
+                if ($monthStartNav == 1) {
+                    $monthBack = 12;
+                    $yearBack = $yearStartNav -1;
+                } else {
+                    $monthBack = $monthStartNav - 1;
+                    $yearBack = $yearStartNav;
+                }
+
+                if ($monthStartNav == 12) {
+                    $monthNext = 1;
+                    $yearNext = $yearStartNav + 1;
+                } else {
+                    $monthNext = $monthStartNav + 1;
+                    $yearNext = $yearStartNav;
+                }
+            ?>
+            <div class="nav-month">
+                <?= Html::a('', ['calendar/index', 'monthStart' => $monthBack, 'yearStart' => $yearBack], ['class' => 'glyphicon glyphicon-chevron-left']) ?>
+                <?= $yearStartNav . ' ' . $month_arr[(int)$monthStartNav - 1] ?>
+                <?= Html::a('', ['calendar/index', 'monthStart' => $monthNext, 'yearStart' => $yearNext], ['class' => 'glyphicon glyphicon-chevron-right']) ?>
+            </div>
+            <?php } ?>
+
+            <?= $calendarHtml ?>
         </div>
         <div class="col-md-3">
             <table class="table">

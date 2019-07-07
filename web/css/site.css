@@ -169,7 +169,7 @@ table.table.table-striped.table-hover.table-sm td {
 .event-filter {
     display: flex;
     flex-wrap: wrap;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .event-filter>div {
     margin: 0px 7px 3px 0;
@@ -222,4 +222,8 @@ table.table.table-striped.table-hover.table-sm td {
         margin-right: 0;
         width: 100%;
     }
+}
+
+.nav-month {
+    margin: 10px 0;
 }

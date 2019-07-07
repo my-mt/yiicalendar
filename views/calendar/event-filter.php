@@ -63,8 +63,7 @@ $monthArr = ['Январь', 'Февраль', 'Март', 'Апрель', 'Ма
             monthStart.val('');
             monthEnd.val('');
         }
-
-        if (yearSart.val() + monthStart.val() > yearEnd.val() + monthEnd.val()) {
+        if (yearSart.val() * 12 + +monthStart.val() > yearEnd.val() * 12 + +monthEnd.val()) {
             alert('"От" не может быть старше "До"');
             return;
         }

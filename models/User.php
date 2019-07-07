@@ -108,6 +108,15 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
     
     public static function getClient()
     {
+        // Запомнаем адрес, чтобы потом по нему перейти после входа
+        $session = Yii::$app->session;
+        if (!$session->isActive) {
+            $session->open();
+        }
+        $_SESSION['before_url'] = $_SERVER["REQUEST_URI"];
+        // Запомнаем адрес, чтобы потом по нему перейти после входа
+
+
         $clientSecrets = __DIR__ . '/../config/api/client_secrets.json';
         if (!file_exists($clientSecrets)) {
             echo '!file_exists';
@@ -117,6 +126,7 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
         }
 
         $client = new Google_Client();
+
         $client->setApplicationName('Google Calendar API PHP my test');
         $client->setScopes(Google_Service_Calendar::CALENDAR);
         $client->setAuthConfig($clientSecrets);
@@ -139,6 +149,9 @@ class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
                 $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
                 $_SESSION['access_token'] = $client->getAccessToken();
             }
+            // echo '<pre>';
+            // print_r($client);
+            // echo '</pre>';
             return $client;
         } else {
             $auth_url = $client->createAuthUrl();

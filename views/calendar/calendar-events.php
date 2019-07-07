@@ -9,6 +9,9 @@ use yii\base\Widget;
 /* @var $this yii\web\View */
 
 $this->title = 'Calendar-events';
+$monthStartNav = $monthStart;
+$yearStartNav = $yearStart;
+$month_arr = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
 ?>
 
 <div class="body-content">
@@ -28,7 +31,46 @@ $this->title = 'Calendar-events';
     // $monthEnd
     // $eventFilterId
     require 'event-filter.php';
+
+    $count = 0;
+    $calendarHtml = '';
+    while ($yearStart != $yearEnd || $monthStart != $monthEnd) {
+        $count++;
+        if ($count > 100) break;
+        $calendarHtml .= '<div class="calendar-single">';
+        $calendarHtml .= Calendarevents_singleWidget::widget(['year' => $yearStart, 'month' => $monthStart, 'data_events' => $dataEvents]);
+        $calendarHtml .= '</div>';
+        if ($monthStart > 11) {
+            $monthStart = 0;
+            $yearStart++;
+        }
+        $monthStart++;
+    }
+    
+    // Для случая, когда показывается один месяц
+    if ($count == 1) {
+        if ($monthStartNav == 1) {
+            $monthBack = 12;
+            $yearBack = $yearStartNav -1;
+        } else {
+            $monthBack = $monthStartNav - 1;
+            $yearBack = $yearStartNav;
+        }
+
+        if ($monthStartNav == 12) {
+            $monthNext = 1;
+            $yearNext = $yearStartNav + 1;
+        } else {
+            $monthNext = $monthStartNav + 1;
+            $yearNext = $yearStartNav;
+        }
     ?>
+    <div class="nav-month">
+        <?= Html::a('', ['calendar/calendar-events', 'id' => $id, 'monthStart' => $monthBack, 'yearStart' => $yearBack], ['class' => 'glyphicon glyphicon-chevron-left']) ?>
+        <?= $yearStartNav . ' ' . $month_arr[(int)$monthStartNav - 1] ?>
+        <?= Html::a('', ['calendar/calendar-events', 'id' => $id, 'monthStart' => $monthNext, 'yearStart' => $yearNext], ['class' => 'glyphicon glyphicon-chevron-right']) ?>
+    </div>
+    <?php } ?>
 
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item active">
@@ -43,46 +85,32 @@ $this->title = 'Calendar-events';
             <div class="row">
                 <div class="col-xs-12">
                     <div class="calendar-events-single">
-                        <?php
-                        $count = 0;
-                        while ($yearStart != $yearEnd || $monthStart != $monthEnd) {
-                            $ount++;
-                            if ($ount > 100) break;
-                            echo '<div class="calendar-single">';
-                            echo Calendarevents_singleWidget::widget(['year' => $yearStart, 'month' => $monthStart, 'data_events' => $dataEvents]);
-                            echo '</div>';
-                            if ($monthStart > 11) {
-                                $monthStart = 0;
-                                $yearStart++;
-                            }
-                            $monthStart++;
-                        }
-                        ?>
+                        <?php echo $calendarHtml ?>
                     </div>
                 </div>
             </div>
         </div>
         <div class="tab-pane" id="table-tab" role="tabpanel">
             <div class="row">
-                    <!-- <pre> -->
-                    <?php
-                    // $calendarDescription - это данные свойстава календаря
-                    // $dataEvents - это события
-                    // print_r($calendarDescription);
-                    // print_r($dataEvents);
+                <!-- <pre> -->
+                <?php
+                // $calendarDescription - это данные свойстава календаря
+                // $dataEvents - это события
+                // print_r($calendarDescription);
+                // print_r($dataEvents);
 
-                    // Получает строку с url изображений и отдает ссылки с картинками.
-                    // Строка разбивается в массив по символам перевода строки, допускается множественный перевод строк, лишняя итерация будет пропущена.
-                    function extractImg($strImg) {
-                        $imgArr = explode("\n", $strImg);
-                        $result = '';
-                        foreach($imgArr as $urlImg){
-                            if (!$urlImg) continue;
-                            $result .= '<a target="_blank" href="' . $urlImg . '" ><img class="event-img" src="' . $urlImg . '"></a>';
-                        }
-                        return $result;
+                // Получает строку с url изображений и отдает ссылки с картинками.
+                // Строка разбивается в массив по символам перевода строки, допускается множественный перевод строк, лишняя итерация будет пропущена.
+                function extractImg($strImg) {
+                    $imgArr = explode("\n", $strImg);
+                    $result = '';
+                    foreach($imgArr as $urlImg){
+                        if (!$urlImg) continue;
+                        $result .= '<a target="_blank" href="' . $urlImg . '" ><img class="event-img" src="' . $urlImg . '"></a>';
                     }
-                    ?>
+                    return $result;
+                }
+                ?>
                 <!-- </pre> -->
                 <div class="col-md-12">
                     <div class="table-responsive">
@@ -146,7 +174,7 @@ $this->title = 'Calendar-events';
                                         </div>
                                     </td>
 
-                                    <td><?= $event['summary']?> </td>
+                                    <td><?= $event['summary']?></td>
                                     <?php
                                     // подсчет чисел из основного поля
                                     // summaryProp 0 - ничего не считает, 1 - суммирует, 2 - вычисляет среднее значение
@@ -161,6 +189,7 @@ $this->title = 'Calendar-events';
                                     
                                     if (is_array($calendarDescription)):
                                         $dataDescription = json_decode($event['description'], true);
+                                        $dataDescription = str_replace("\n", "<br>", $dataDescription);
                                         if (is_array($dataDescription)) { // если в поле description данные json то обрабатываем как надо
                                             foreach($calendarDescription['data'] as $k => $v) {
                                                 if (isset($sum[$k])) {
@@ -180,7 +209,7 @@ $this->title = 'Calendar-events';
                                                 }
                                             }
                                             echo "<td></td>";
-                                        } else {  // если нет, товыводим пустые столбцы
+                                        } else {  // если нет, то выводим пустые столбцы
                                             foreach($calendarDescription['data'] as $v) { //calendarDescription->data
                                                 echo "<td>---</td>";
                                             } 
