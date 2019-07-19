@@ -6,3 +6,4 @@ return [
 ];
 
 //echo Yii::$app->params['adminEmail'];
+// test
