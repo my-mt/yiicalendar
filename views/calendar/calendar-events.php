@@ -189,7 +189,6 @@ $month_arr = ["Январь", "Февраль", "Март", "Апрель", "М�
                                     
                                     if (is_array($calendarDescription)):
                                         $dataDescription = json_decode($event['description'], true);
-                                        $dataDescription = str_replace("\n", "<br>", $dataDescription);
                                         if (is_array($dataDescription)) { // если в поле description данные json то обрабатываем как надо
                                             foreach($calendarDescription['data'] as $k => $v) {
                                                 if (isset($sum[$k])) {
@@ -204,7 +203,7 @@ $month_arr = ["Январь", "Февраль", "Март", "Апрель", "М�
                                                         echo "</td>";
                                                         break;
                                                     default:
-                                                        echo "<td>" . @$dataDescription[$k] . "</td>";
+                                                        echo "<td>" . str_replace("\n", "<br>", @$dataDescription[$k]) . "</td>";
                                                         break;
                                                 }
                                             }
