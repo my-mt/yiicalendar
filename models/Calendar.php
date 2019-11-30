@@ -10,7 +10,11 @@ use Google_Service_Calendar_Event;
 use Google_Service_Calendar_EventDateTime;
 
 class Calendar extends Model
+
 {
+    // private $googleServiceCalendar;
+
+
     // Получить список календарей
     public static function getCalendarList($service)
     {
@@ -74,11 +78,32 @@ class Calendar extends Model
         return $result;
     }
 
+
+    private function getGoogleServiceCalendar() {
+        return new Google_Service_Calendar(User::getClient());
+    }
+
     // Получить свойства календаря
     public static function getCalendar($id)
     {   
-        $service = new Google_Service_Calendar(User::getClient());
+        $service = Self::getGoogleServiceCalendar();
         return $service->calendars->get($id);    
+    }
+
+    // получить список календарей id => name
+    public static function getSimpleCalendarList($id)
+    {   
+        $service = Self::getGoogleServiceCalendar();
+        $calendarList = Self::getCalendarList($service);
+        $result = ['' => ''];
+        foreach ($calendarList as $cal) {
+            // echo '<pre>';
+            // print_r($cal);
+            // echo '</pre>';
+            // exit;
+            $result[$cal['id'] ] = $cal['summary'];
+        }
+        return $result;
     }
     
     // Получить свойства события

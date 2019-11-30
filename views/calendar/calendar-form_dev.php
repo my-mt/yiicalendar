@@ -23,32 +23,6 @@ $fieldType = [
 
 $descriptionArr = json_decode($description);
 
-// echo '<pre>';
-// print_r($descriptionArr);
-// echo '</pre>';
-// exit;
-
-if (!isset($descriptionArr->formatVersion) || $descriptionArr->formatVersion != "02") {
-    // надо переформатировать в формат 02
-    $data_02 = [];
-    if (isset($descriptionArr->data)) {
-        foreach ($descriptionArr->data as $k => $type) {
-            $data_02[$k] = (object) [
-                'name' => $k,
-                'type' => $type
-            ];
-
-        }
-
-        $descriptionArr->data = (object) $data_02;
-        $descriptionArr->formatVersion = "02";
-        $description = json_encode($descriptionArr, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
-        echo '<h2>Произведено переформатирование в формат версии 02</h2>';
-    }
-
-}
-
 ?>
 <div class='row hidden'>
     <div id="tpl-select-type">
@@ -118,9 +92,9 @@ if (!isset($descriptionArr->formatVersion) || $descriptionArr->formatVersion != 
                 <label class="control-label" >Дополнительные поля</label>
                 <span id="add-field" class="add-element">+</span>
                 <?php
-                // echo '<pre>';
-                // print_r($descriptionArr->data);
-                // echo '</pre>';
+                echo '<pre>';
+                print_r($descriptionArr->data);
+                echo '</pre>';
                 if (is_object(@$descriptionArr->data)):
                     foreach ($descriptionArr->data as $key => $dataField) {
                         ?>
@@ -184,17 +158,13 @@ if (!isset($descriptionArr->formatVersion) || $descriptionArr->formatVersion != 
     // Функция формирует строку json для description
     function makeDescriptionStr() {
         var data = {};
-        var dateForKey = new Date().getTime(); // используем время для ключа поля
         $('.add-field-sec p').each(function() {
-            if ($(this).children('input').val()) {
-            // при этом условии поле не будет удаляться
-            // if ($(this).children('input').val() || $(this).children('span[name="key"]').text()) {
+            if($(this).children('input').val()) {
 
                 var keyField = $(this).children('span[name="key"]').text();
 
                 if (!keyField) {
-                    dateForKey += 1;
-                    keyField = 'key_' + dateForKey; // используем время для ключа поля
+                    keyField = new Date().getTime(); // используем время для ключа поля
                 }
                 
                 data[keyField] = {
@@ -234,52 +204,49 @@ if (!isset($descriptionArr->formatVersion) || $descriptionArr->formatVersion != 
             'data': data,
             'settings': settings,
             'parent': parent,
-            'formatVersion': '02'
         };
         console.log(description);
         $('textarea[name="description"]').val(JSON.stringify(description));
     }
 
     // Функция формирует строку json для description
-    // function makeDescriptionStr0() {
-    //     var data = {};
-    //     $('.add-field-sec p').each(function() {
-    //         if($(this).children('input').val()) {
-    //             data[$(this).children('input').val()] = $(this).children('select').val();
-    //         }
-    //     });
+    function makeDescriptionStr0() {
+        var data = {};
+        $('.add-field-sec p').each(function() {
+            if($(this).children('input').val()) {
+                data[$(this).children('input').val()] = $(this).children('select').val();
+            }
+        });
 
-    //     // родительский календарь
-    //     var parent = $('#parent-calendar').val();
+        // родительский календарь
+        var parent = $('#parent-calendar').val();
         
-    //     // проверка чекбоксов основного поля
-    //     var summaryCalc = [];
-    //     $('.calc-summary[type="checkbox"]').each(function() {
-    //         if($(this).is(":checked")) {
-    //             summaryCalc.push($(this).data('calc'));
-    //         }
-    //     });
+        // проверка чекбоксов основного поля
+        var summaryCalc = [];
+        $('.calc-summary[type="checkbox"]').each(function() {
+            if($(this).is(":checked")) {
+                summaryCalc.push($(this).data('calc'));
+            }
+        });
 
-    //     var simpleMode = [];
-    //     $('.simple-mode[type="checkbox"]').each(function() {
-    //         if($(this).is(":checked")) {
-    //             simpleMode.push($(this).data('mode'));
-    //         }
-    //     });
+        var simpleMode = [];
+        $('.simple-mode[type="checkbox"]').each(function() {
+            if($(this).is(":checked")) {
+                simpleMode.push($(this).data('mode'));
+            }
+        });
         
-    //     var settings = {
-    //         'summary': $('#settings-summary').val(),
-    //         'summaryCalc': summaryCalc,
-    //         'simpleMode': simpleMode,
-    //     }
-    //     var description = {
-    //         'data': data,
-    //         'settings': settings,
-    //         'parent': parent,
-    //         'formatVersion': '02'
-    //     };
-    //     console.log('new');
-    //     console.log(description);
-    //     $('textarea[name="description"]').val(JSON.stringify(description));
-    // }
+        var settings = {
+            'summary': $('#settings-summary').val(),
+            'summaryCalc': summaryCalc,
+            'simpleMode': simpleMode,
+        }
+        var description = {
+            'data': data,
+            'settings': settings,
+            'parent': parent,
+        };
+        console.log(description);
+        $('textarea[name="description"]').val(JSON.stringify(description));
+    }
 </script>

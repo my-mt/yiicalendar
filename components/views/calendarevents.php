@@ -72,6 +72,7 @@ function getProperty(id, property = 0, data) {
 function showEvent(arrIdrec) {
     arrIdrec = arrIdrec.split(',');
     var calendarDescription = JSON.parse(getProperty(arrIdrec[0], 'calendar_description', dataEvents));
+    // console.log(calendarDescription);
     if (calendarDescription) {
         var summary = calendarDescription.settings.summary;
     } else {
@@ -86,7 +87,11 @@ function showEvent(arrIdrec) {
     try {
         if(Object.keys(calendarDescription.data).length > 0) {
             for(key in calendarDescription.data) {
-                table += '<th>' + key + '</th>';
+                if (calendarDescription.formatVersion === '02') {
+                    table += '<th>' + calendarDescription.data[key].name + '</th>';
+                } else {
+                   table += '<th>' + key + '</th>'; 
+                }
             }
         } else {
             table += '<th>Описание</th>';
@@ -160,7 +165,8 @@ function showEvent(arrIdrec) {
                  var str = '';
                 for(key in calendarDescription.data) {
                     if (data[key] !== undefined) {
-                        switch(calendarDescription.data[key]) {
+                        var typeField = calendarDescription.formatVersion === "02" ? calendarDescription.data[key].type : calendarDescription.data[key];
+                        switch(typeField) {
                             case 'url_image':
                                 str += '<td>' + extractImg(data[key]) + '</td>';
                                 break

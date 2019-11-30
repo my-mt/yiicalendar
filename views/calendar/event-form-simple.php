@@ -36,7 +36,8 @@ h3 {
     font-size: 40px;
     padding: 5px;
     text-align: right;
-    background-color: #337ab7;
+    /*background-color: #337ab7;*/
+    background-color: #4a4a4a;
     color: #fff;
     letter-spacing: 5px;
 }
@@ -61,8 +62,11 @@ h3 {
     background: #ddd;
 }
 
-.btn {
-    width: 105px;
+.btn-success {
+    width: 170px;
+}
+.btn-danger {
+    width: 39px;
 }
 </style>
 
@@ -173,7 +177,7 @@ h3 {
 
     <div class="form-group">
     <button form="w0" type="submit" class="btn btn-success">Сохранить</button>
-    <?= Html::a('Отменить', ['calendar/calendar-events', 'id' => $calendarId], ['class' => 'btn btn-primary']); ?>
+    <?= Html::a('', ['calendar/calendar-events', 'id' => $calendarId], ['class' => 'btn btn-danger glyphicon glyphicon-remove']); ?>
     <?php ActiveForm::end(); ?>
     </div>
 </div>

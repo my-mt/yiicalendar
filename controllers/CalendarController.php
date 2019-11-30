@@ -137,11 +137,14 @@ class CalendarController extends Controller
         };
 
         $calendar = Calendar::getCalendar($id);
+
+        $calendarList = Calendar::getSimpleCalendarList();
         
         return $this->render('calendar-form', [
             'id' => $id,
             'summary' => $calendar->summary,
             'description' => $calendar->description,
+            'calendarList' => $calendarList,
         ]);
     }
     
@@ -162,6 +165,7 @@ class CalendarController extends Controller
         $calendarSetSummary = @$calendarDescription->settings->summary;
         $calendarSettings = @$calendarDescription->settings;
         $calendarFields = @$calendarDescription->data;
+        $calendarFormatVersion = @$calendarDescription->formatVersion;
         
         $dateStart = ($event->start->date) ? $event->start->date : substr($event->start->dateTime, 0, 10);
         $dateEnd = ($event->end->date) ? $event->end->date : substr($event->end->dateTime, 0, 10);
@@ -181,6 +185,7 @@ class CalendarController extends Controller
             'timeStart' => $timeStart,
             'timeEnd' => $timeEnd,
             'calendarSettings' => $calendarSettings,
+            'calendarFormatVersion' => $calendarFormatVersion,
         ]);
     }
     
@@ -199,6 +204,7 @@ class CalendarController extends Controller
         $calendarSetSummary = @$calendarDescription->settings->summary;
         $calendarSettings = @$calendarDescription->settings;
         $calendarFields = @$calendarDescription->data;
+        $calendarFormatVersion = @$calendarDescription->formatVersion;
         
         $dateStart = date('Y-m-d', time());
         $dateEnd = $dateStart;
@@ -223,6 +229,7 @@ class CalendarController extends Controller
             'timeStart' => $timeStart,
             'timeEnd' => $timeEnd,
             'calendarSettings' => $calendarSettings,
+            'calendarFormatVersion' => $calendarFormatVersion,
         ]);
     }
     
