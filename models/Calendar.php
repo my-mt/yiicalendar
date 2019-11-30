@@ -35,6 +35,7 @@ class Calendar extends Model
             }
         }
 
+        // Сортировка по названию календаря
         usort($result, function($a,$b){
             return $a['summary'] > $b['summary'];
         });
