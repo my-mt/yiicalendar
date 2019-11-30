@@ -34,6 +34,11 @@ class Calendar extends Model
                 break;
             }
         }
+
+        usort($result, function($a,$b){
+            return $a['summary'] > $b['summary'];
+        });
+
         return $result;
     }
     
