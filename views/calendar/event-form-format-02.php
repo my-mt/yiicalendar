@@ -139,7 +139,7 @@ echo "<small>Формат $formatVersion</small>";
                 </div>
             
             <?php }
-                if ($showDescription && !@$calendarSettings->descriptionHide || 1) {
+                if ($showDescription && !@$calendarSettings->descriptionHide) {
                     $descriptionStyle = "style='display: block'";
                 } else {
                     $descriptionStyle = "style='display: none'";
