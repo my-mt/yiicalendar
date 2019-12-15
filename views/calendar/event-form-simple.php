@@ -16,7 +16,7 @@ $this->title = 'Event form';
 <style>
 .content {
     margin: 0 auto;
-    width: 222px;
+    width: 267px;
 }
 h3 {
     margin: -12px 0 -10px 0;
@@ -31,7 +31,7 @@ h3 {
 #result {
     /*border: 2px solid #555;*/
     border-radius: 4px;
-    width: 213px;
+    width: 262px;
     margin: 2px;
     font-size: 40px;
     padding: 5px;
@@ -44,10 +44,10 @@ h3 {
 .row-numeric-keypad>div {
     display: inline-block;
     border: 2px solid #555;
-    width: 50px;
+    width: 100%;
     height: 50px;
     margin: 2px;
-    font-size: 32px;
+    font-size: 33px;
     font-weight: 500;
     text-align: center;
     border-radius: 5px;
@@ -63,7 +63,7 @@ h3 {
 }
 
 .btn-success {
-    width: 170px;
+    width: 221px;
 }
 .btn-danger {
     width: 39px;
@@ -81,14 +81,18 @@ h3 {
         <input class="form-control" type="hidden" name="summary" value="<?= @$event->summary ?>">
     </div>
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12" style="padding: 0 18px;">
             <div class="form-group start-section" style="display: flex;">
-                <div style="width: 100px; margin-right: 15px;">
+                <div style="width: 141px; margin-right: 15px;">
                 <?php
+                // https://demos.krajee.com/widget-details/datepicker#markup-input
                 echo DatePicker::widget([
                     'name' => 'dateStart',
                     'value' => $dateStart,
-                    'type' => DatePicker::TYPE_INPUT,
+                    'readonly' => true,
+                    // 'type' => DatePicker::TYPE_INPUT,
+                    'type' => DatePicker::TYPE_COMPONENT_APPEND,
+                    'removeButton' => false,
                     'pluginOptions' => [
                         'orientation' => 'bottom left',
                         'format' => 'yyyy-mm-dd',
@@ -97,7 +101,7 @@ h3 {
                 ]);
                 ?>
                 </div>
-                <div class="event-time-field" style="width: 100px;">
+                <div class="event-time-field" style="width: 103px;">
                 <?php
                 echo TimePicker::widget([
                     'name' => 'timeStart',
