@@ -549,7 +549,7 @@ table.comparative-table-garage  td{
   border: none;
 }
 .calendar-tadev-section tbody td {
-  height: 75px;
+  /*height: 75px;*/
 }
 .calendar-tadev-section.single tbody td {
   height: auto;
@@ -567,6 +567,7 @@ table.comparative-table-garage  td{
   align-items: flex-start;
   align-content: flex-start;
   flex-wrap: wrap;
+  min-height: 75px;
 }
 .calendar-tadev-section td .main .event-item {
   cursor: pointer;
