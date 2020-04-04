@@ -144,6 +144,7 @@ class CalendarController extends Controller
             'id' => $id,
             'summary' => $calendar->summary,
             'description' => $calendar->description,
+            // 'calendar' => $calendar,
             'calendarList' => $calendarList,
         ]);
     }

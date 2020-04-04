@@ -205,7 +205,6 @@ function showEvent(arrIdrec) {
 }
 
 var dataEvents = <?= json_encode($data_events) ?>;
-//console.log('dataEvents --- ', dataEvents);
 
 // функция строит календарь в блоке с id="calendar-tadev"
 $(function() {
