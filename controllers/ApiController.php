@@ -3,7 +3,7 @@ namespace app\controllers;
 
 use yii\web\Controller;
 
-class UserController extends Controller
+class ApiController extends Controller
 {
 
     public function actionCheck()
