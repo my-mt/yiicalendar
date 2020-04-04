@@ -78,9 +78,16 @@ $month_arr = ["Январь", "Февраль", "Март", "Апрель", "М�
                     <th>Доб.</th>
                     <th></th>
                 </tr>
-                <?php foreach ($calendarList as $k => $calendar) { ?>
+                <?php
+                $count = 1;
+                ?>
+                <?php foreach ($calendarList as $k => $calendar) {
+                    if ($calendar->accessRole != 'owner') {
+                        continue;
+                    }
+                ?>
                 <tr>
-                    <td><?= ++$k ?></td>
+                    <td><?= $count++ ?></td>
                     <td>
                         <?= Html::a("", ['calendar/update-calendar', 'id' => $calendar->id], ['class' => 'profile-link glyphicon glyphicon-cog']); ?>
                     </td>
@@ -92,7 +99,26 @@ $month_arr = ["Январь", "Февраль", "Март", "Апрель", "М�
                     </td>
                 </tr>
                 <?php } ?>
-            </table> 
+                <tr>
+                    <td colspan="3"><b>Чужие</b></td>
+                </tr>
+                <?php foreach ($calendarList as $k => $calendar) {
+                    if ($calendar->accessRole != 'reader') {
+                        continue;
+                    }
+                ?>
+                <tr>
+                    <td><?= $count++ ?></td>
+                    <td>
+                    </td>
+                    <td>
+                         <?=  Html::a($calendar->summary, ['calendar/calendar-events', 'id' => $calendar->id], ['class' => '']); ?>
+                    </td>
+                    <td>
+                    </td>
+                </tr>
+                <?php } ?>
+            </table>
         </div>
 
     </div>

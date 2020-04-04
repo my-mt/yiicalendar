@@ -29,7 +29,8 @@ echo "<small>Формат $formatVersion</small>";
             <input type="hidden" name="eventId" value="<?= @$eventId ?>">
             <div class="form-group">
                 <label class="control-label"><?= $calendarSetSummary ?></label>
-                <input class="form-control" type="text" name="summary" value="<?= @$event->summary ?>">
+               <!--  <input class="form-control" type="text" name="summary" value="<?= @$event->summary ?>"> -->
+                <textarea class="form-control" rows="2" name="summary"><?= @$event->summary ?></textarea>
             </div>
             <div class="row">
                 <div class="col-xs-6">

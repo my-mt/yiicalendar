@@ -10,6 +10,11 @@ use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 
+// echo '<pre>';
+// print_r($calendar);
+// echo '</pre>';
+
+
 $this->title = 'Calendar form';
 $fieldType = [
     'int' => 'целые числа',
