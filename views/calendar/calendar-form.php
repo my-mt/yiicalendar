@@ -47,12 +47,13 @@ if (!isset($descriptionArr->formatVersion) || $descriptionArr->formatVersion != 
 
         $descriptionArr->data = (object) $data_02;
         $descriptionArr->formatVersion = "02";
-        $description = json_encode($descriptionArr, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
         echo '<h2>Произведено переформатирование в формат версии 02</h2>';
     }
 
 }
+
+$description = json_encode($descriptionArr, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
 
 ?>
 <div class='row hidden'>

@@ -1,0 +1,24 @@
+[
+    {
+        "calendar_description": "{\"data\":{\"key_1586122592918\":{\"name\":\"Примечание\",\"type\":\"str\"},\"key_1586122592919\":{\"name\":\"Затраты\",\"type\":\"float\"}},\"settings\":{\"summary\":\"Количество\",\"summaryCalc\":[1],\"simpleMode\":[]},\"parent\":\"ur6843huqabtjsi81cln95183s@group.calendar.google.com\",\"formatVersion\":\"02\"}",
+        "calendar_summary": "Тестовый",
+        "calendar_backgroundColor": null,
+        "calendar_id": "9i1fqv9qfnri48eg8fa9l46dm4@group.calendar.google.com",
+        "id": "df09k0l8gc018k5uuasuog91oo",
+        "start": "2020-04-07T12:50:00+03:00",
+        "end": "2020-04-07T15:50:00+03:00",
+        "summary": "456",
+        "description": "{\"key_1586122592918\":\"Тестовое примечание 456\",\"key_1586122592919\":\"23.5\"}"
+    },
+    {
+        "calendar_description": "{\"data\":{\"key_1586122592918\":{\"name\":\"Примечание\",\"type\":\"str\"},\"key_1586122592919\":{\"name\":\"Затраты\",\"type\":\"float\"}},\"settings\":{\"summary\":\"Количество\",\"summaryCalc\":[1],\"simpleMode\":[]},\"parent\":\"ur6843huqabtjsi81cln95183s@group.calendar.google.com\",\"formatVersion\":\"02\"}",
+        "calendar_summary": "Тестовый",
+        "calendar_backgroundColor": null,
+        "calendar_id": "9i1fqv9qfnri48eg8fa9l46dm4@group.calendar.google.com",
+        "id": "60mvvmpu56uphdq8ae8ski8bn8",
+        "start": "2020-04-06T00:48:00+03:00",
+        "end": "2020-04-06T01:50:00+03:00",
+        "summary": "123",
+        "description": "{\"key_1586122592918\":\"Тестовое примечание 123\",\"key_1586122592919\":\"345.50\"}"
+    }
+]

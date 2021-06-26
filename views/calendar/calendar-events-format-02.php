@@ -7,6 +7,9 @@ use yii\base\Widget;
 
 /* @var $this yii\web\View */
 
+// file_put_contents(__DIR__ . '/calendarDescription_pretty', json_encode($calendarDescription, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+// file_put_contents(__DIR__ . '/dataEvents_pretty', json_encode($dataEvents, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
+
 $this->title = 'Calendar-events';
 $monthStartNav = $monthStart;
 $yearStartNav = $yearStart;
@@ -65,19 +68,37 @@ if ($_GET['nv'] == 1) {
 
     $count = 0;
     $calendarHtml = '';
-    while ($yearStart != $yearEnd || $monthStart != $monthEnd) {
-        $count++;
-        if ($count > 100) break;
-        $calendarHtml .= '<div class="calendar-single">';
-        $calendarHtml .= Calendarevents_singleWidget::widget(['year' => $yearStart, 'month' => $monthStart, 'data_events' => $dataEvents]);
-        $calendarHtml .= '</div>';
-        if ($monthStart > 11) {
-            $monthStart = 0;
-            $yearStart++;
+
+
+    if ($_GET['nv'] == 2) {
+        while ($yearStart != $yearEnd || $monthStart != $monthEnd) {
+            $count++;
+            if ($count > 100) break;
+            $calendarHtml .= '<div>';
+            $calendarHtml .= Calendarevents_singleWidget_rm::widget(['year' => $yearStart, 'month' => $monthStart, 'data_events' => $dataEvents]);
+            $calendarHtml .= '</div>';
+            if ($monthStart > 11) {
+                $monthStart = 0;
+                $yearStart++;
+            }
+            $monthStart++;
         }
-        $monthStart++;
+    } else {
+        while ($yearStart != $yearEnd || $monthStart != $monthEnd) {
+            $count++;
+            if ($count > 100) break;
+            $calendarHtml .= '<div class="calendar-single">';
+            $calendarHtml .= Calendarevents_singleWidget::widget(['year' => $yearStart, 'month' => $monthStart, 'data_events' => $dataEvents]);
+            $calendarHtml .= '</div>';
+            if ($monthStart > 11) {
+                $monthStart = 0;
+                $yearStart++;
+            }
+            $monthStart++;
+        }
     }
-    
+
+
     // Для случая, когда показывается один месяц
     if ($count == 1) {
         if ($monthStartNav == 1) {
@@ -144,6 +165,14 @@ if ($_GET['nv'] == 1) {
                 ?>
                 <!-- </pre> -->
                 <div class="col-md-12">
+                    <div>
+                        <h4>Фильтр</h4>
+                        <div style="display: flex;">
+                            <input id="filter" class="form-control" type="text" name="" value="" style="margin-right: 15px;">
+                            <button id="btn-filter"class="btn btn-primary" style="margin-right: 10px;">Применить</button>
+                            <button id="btn-filter-reset"class="btn btn-warning">Сброс</button>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table class="table table-striped table-responsive table-calendar-events">
                             <thead class="thead-inverse">
@@ -172,7 +201,7 @@ if ($_GET['nv'] == 1) {
                                 foreach($dataEvents as $event) { $i--; ?>
                                 <tr>
                                     <td>
-                                        <div  class="date-time"> 
+                                        <div  class="date-time">
                                             <div class="date-str number-start"><?= strftime("%d", strtotime($event['start'])) ?></div>
                                             <?php if (strlen($event['start']) < 11) { ?>
                                             <div class="date-str"><?= strftime("<b>весь день</b><br><small>%b %Y</small>", strtotime($event['start'])) ?></div>
@@ -195,7 +224,7 @@ if ($_GET['nv'] == 1) {
                                     }
                                     ?>
                                     <td>
-                                        <div  class="date-time <?= $hideDateAll ?>"> 
+                                        <div  class="date-time <?= $hideDateAll ?>">
                                             <div class="date-str number-end <?= $hideDate ?>"><?= strftime("%d", strtotime($event['end'])) ?></div>
                                             <div class="date-str">
                                                 <b><?= strftime("%H:%M", strtotime($event['end'])) ?></b><br>
@@ -217,7 +246,7 @@ if ($_GET['nv'] == 1) {
                                             $sum['summary'] = (double)$event['summary'];
                                         }
                                     }
-                                    
+
                                     if (is_array($calendarDescription)):
                                         $dataDescription = json_decode($event['description'], true);
                                         if (is_array($dataDescription)) { // если в поле description данные json то обрабатываем как надо
@@ -242,11 +271,11 @@ if ($_GET['nv'] == 1) {
                                         } else {  // если нет, то выводим пустые столбцы
                                             foreach($calendarDescription['data'] as $v) { //calendarDescription->data
                                                 echo "<td>---</td>";
-                                            } 
+                                            }
                                             echo "<td>" . $event['description'] . "</td>";
                                         }
                                     else:
-                                        echo "<td>" . $event['description'] . "</td>";                       
+                                        echo "<td>" . $event['description'] . "</td>";
                                     endIf;
                                     ?>
                                     <td><?= Html::a('', ['calendar/update-event', 'calendarId' => $event['calendar_id'], 'eventId' => $event['id']], ['class' => 'profile-link glyphicon glyphicon-cog']); ?></td>
@@ -274,9 +303,41 @@ if ($_GET['nv'] == 1) {
                                 </tr>
                             </tbody>
                         </table>
-                    </div>   
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<script>
+window.onload=function() {
+    $('#btn-filter').click(function() {
+        $('.table-calendar-events tbody tr').removeClass('showTr');
+        // var searchStr = $('#filter').val();
+        var searchStr = new RegExp($('#filter').val(), 'gi');
+        console.log('search ---', searchStr);
+        $('.table-calendar-events tbody tr').each(function() {
+            var tr = $(this);
+            tr.children("td").each(function() {
+                var result = $(this).html().match(searchStr);
+                if (result) {
+                    tr.addClass('showTr')
+                }
+            });
+        });
+
+        $('.table-calendar-events tbody tr').hide();
+        $('.table-calendar-events tbody tr.showTr').show();
+
+    });
+
+    $('#btn-filter-reset').click(function() {
+        $('.table-calendar-events tbody tr').removeClass('showTr');
+        $('.table-calendar-events tbody tr').show();
+    });
+
+
+}
+</script>

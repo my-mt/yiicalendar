@@ -115,6 +115,7 @@ echo "Формат $formatVersion";
                         break;
                     case 'time':
                         $type = "time";
+                        break;
                     case 'str':
                     case 'url_image':
                         $textarea = 7;

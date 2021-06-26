@@ -1,0 +1,21 @@
+{
+    "data": {
+        "key_1586122592918": {
+            "name": "Примечание",
+            "type": "str"
+        },
+        "key_1586122592919": {
+            "name": "Затраты",
+            "type": "float"
+        }
+    },
+    "settings": {
+        "summary": "Количество",
+        "summaryCalc": [
+            1
+        ],
+        "simpleMode": []
+    },
+    "parent": "ur6843huqabtjsi81cln95183s@group.calendar.google.com",
+    "formatVersion": "02"
+}

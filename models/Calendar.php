@@ -19,9 +19,9 @@ class Calendar extends Model
     public static function getCalendarList($service)
     {
         $result = [];
-        
+
         $calendarList = $service->calendarList->listCalendarList();
-        
+
         while (true) {
             foreach ($calendarList->getItems() as $calendarListEntry) {
                 $result[] = $calendarListEntry;
@@ -42,13 +42,13 @@ class Calendar extends Model
 
         return $result;
     }
-    
+
     // Получить список событий каледаря $calendar за период времени
     // $timeMin, $timeMax '2018-02-12T15:19:21+00:00'
     public static function getListEvents($service, $calendar, $timeMin, $timeMax, $maxResults = 100)
     {
         $result = [];
-        
+
         $optParams = array(
             'maxResults' => $maxResults,
             'orderBy' => 'startTime',
@@ -56,10 +56,10 @@ class Calendar extends Model
             'timeMin' => $timeMin,
             'timeMax' => $timeMax,
         );
-        
+
         $eventsData = $service->events->listEvents($calendar->id, $optParams);
         $events = $eventsData->getItems();
-        
+
         foreach ($events as $event) {
             $start = $event->start->dateTime;
             if (empty($start)) {
@@ -91,14 +91,14 @@ class Calendar extends Model
 
     // Получить свойства календаря
     public static function getCalendar($id)
-    {   
+    {
         $service = Self::getGoogleServiceCalendar();
-        return $service->calendars->get($id);    
+        return $service->calendars->get($id);
     }
 
     // получить список календарей id => name
-    public static function getSimpleCalendarList($id)
-    {   
+    public static function getSimpleCalendarList()
+    {
         $service = Self::getGoogleServiceCalendar();
         $calendarList = Self::getCalendarList($service);
         $result = ['' => ''];
@@ -111,17 +111,17 @@ class Calendar extends Model
         }
         return $result;
     }
-    
+
     // Получить свойства события
     public static function getEvent($calendarId, $eventId)
-    {   
+    {
         $service = new Google_Service_Calendar(User::getClient());
-        return $service->events->get($calendarId, $eventId);    
+        return $service->events->get($calendarId, $eventId);
     }
-    
+
     // Редактирование календаря
     public static function updateCalendar($id, $summary, $description)
-    {   
+    {
         $service = new Google_Service_Calendar(User::getClient());
         $calendar = $service->calendars->get($id);
         $calendar->setSummary($summary);
@@ -130,7 +130,7 @@ class Calendar extends Model
 
         return $updatedCalendar->getEtag();
     }
-    
+
     // Редактирование события
     public static function updateEvent($data)
     {
@@ -140,7 +140,7 @@ class Calendar extends Model
         $event->setDescription($data['description']);
         $start = new Google_Service_Calendar_EventDateTime();
         $end = new Google_Service_Calendar_EventDateTime();
-        
+
         if (@$data['all-day']) {
             $start->setDate($data['dateStart']);
             $end->setDate($data['dateEnd']);
@@ -148,21 +148,21 @@ class Calendar extends Model
             $start->setDateTime($data['dateStart'].'T'.$data['timeStart'].':00+03:00');
             $end->setDateTime($data['dateEnd'].'T'.$data['timeEnd'].':00+03:00');
         }
-        
+
         $event->setStart($start);
         $event->setEnd($end);
-        
+
         $updatedEvent = $service->events->update($data['calendarId'], $event->getId(), $event);
 
         return [$event->id, $event->htmlLink];
     }
-    
+
     // Создание события
     public static function insertEvent($data)
-    {   
+    {
 
         $service = new Google_Service_Calendar(User::getClient());
-        
+
         if (@$data['all-day']) {
             $event = new Google_Service_Calendar_Event(array(
             'summary' => $data['summary'],
@@ -190,7 +190,7 @@ class Calendar extends Model
         $event = $service->events->insert($data['calendarId'], $event);
         return [$event->id, $event->htmlLink];
     }
-    
+
     // Удаление события
     public static function deleteEvent($calendarId, $eventId)
     {

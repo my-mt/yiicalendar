@@ -21,7 +21,8 @@
         "google/apiclient": "^2.0",
         "kartik-v/yii2-field-range": "*",
         "kartik-v/yii2-widgets": "*",
-        "kartik-v/yii2-widget-timepicker": "*"
+        "kartik-v/yii2-widget-timepicker": "*",
+        "google/photos-library": "^1.6"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
